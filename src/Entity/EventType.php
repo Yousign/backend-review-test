@@ -11,8 +11,8 @@ class EventType extends AbstractEnumType
     public const PULL_REQUEST = 'PR';
 
     protected static array $choices = [
-        self::COMMIT => 'Commit',
+        self::COMMIT => 'Push',
         self::COMMENT => 'Comment',
-        self::PULL_REQUEST => 'Pull Request',
+        self::PULL_REQUEST => 'PullRequest',
     ];
 }
