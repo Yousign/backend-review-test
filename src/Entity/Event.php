@@ -66,6 +66,9 @@ class Event
         $this->type = $type;
         $this->actor = $actor;
         $this->repo = $repo;
+        // Couldn't find any other way to deal with NULL unicode within payload...
+        $payload = json_encode($payload);
+        $payload = json_decode(str_replace('\\u0000', '', str_replace('\\\\u0000', '', $payload)), true, 512, JSON_THROW_ON_ERROR);
         $this->payload = $payload;
         $this->createAt = $createAt;
         $this->comment = $comment;
