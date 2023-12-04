@@ -2,10 +2,10 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Actor;
-use App\Entity\Event;
-use App\Entity\EventType;
-use App\Entity\Repo;
+use App\Domain\Entity\Actor;
+use App\Domain\Entity\Event;
+use App\Domain\Entity\EventType;
+use App\Domain\Entity\Repo;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 

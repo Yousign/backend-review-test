@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Dto;
+namespace App\Application\Dto;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class EventInput
+final class EventInput
 {
     /**
      * @Assert\Length(min=20)

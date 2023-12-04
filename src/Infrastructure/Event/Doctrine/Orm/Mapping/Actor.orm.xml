@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Domain\Entity\Actor" table="actor">
+    <id name="id" type="bigint" column="id"/>
+    <field name="login" type="string" column="login" nullable="false"/>
+    <field name="url" type="string" column="url" nullable="false"/>
+    <field name="avatarUrl" type="string" column="avatar_url" nullable="false"/>
+  </entity>
+</doctrine-mapping>

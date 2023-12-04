@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Controller;
+namespace App\Application\Controller;
 
-use App\Dto\EventInput;
-use App\Repository\ReadEventRepository;
-use App\Repository\WriteEventRepository;
+use App\Application\Dto\EventInput;
+use App\Domain\Repository\ReadEventRepositoryInterface;
+use App\Domain\Repository\WriteEventRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class EventController
+final class EventController
 {
-    private WriteEventRepository $writeEventRepository;
-    private ReadEventRepository $readEventRepository;
+    private WriteEventRepositoryInterface $writeEventRepository;
+    private ReadEventRepositoryInterface $readEventRepository;
     private SerializerInterface $serializer;
 
     public function __construct(
-        WriteEventRepository $writeEventRepository,
-        ReadEventRepository $readEventRepository,
+        WriteEventRepositoryInterface $writeEventRepository,
+        ReadEventRepositoryInterface $readEventRepository,
         SerializerInterface $serializer
     ) {
         $this->writeEventRepository = $writeEventRepository;

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Dto;
+namespace App\Application\Dto;
 
-class SearchInput
+final class SearchInput
 {
     /**
      * @var \DateTimeImmutable

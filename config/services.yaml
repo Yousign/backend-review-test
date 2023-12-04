@@ -21,8 +21,8 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Controller\:
-        resource: '../src/Controller/'
+    App\Application\Controller\:
+        resource: '../src/Application/Controller/'
         tags: [ 'controller.service_arguments' ]
 
-    App\Entity\EventType: ~
+    App\Domain\Entity\EventType: ~

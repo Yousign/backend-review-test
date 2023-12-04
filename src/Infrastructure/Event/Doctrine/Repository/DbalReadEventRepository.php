@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Repository;
+namespace App\Infrastructure\Event\Doctrine\Repository;
 
-use App\Dto\SearchInput;
+use App\Application\Dto\SearchInput;
+use App\Domain\Entity\EventType;
+use App\Domain\Repository\ReadEventRepositoryInterface;
 use Doctrine\DBAL\Connection;
 
-class DbalReadEventRepository implements ReadEventRepository
+final class DbalReadEventRepository implements ReadEventRepositoryInterface
 {
     private Connection $connection;
 
@@ -20,12 +22,14 @@ class DbalReadEventRepository implements ReadEventRepository
         SELECT sum(count) as count
         FROM event
         WHERE date(create_at) = :date
-        AND payload like %{$searchInput->keyword}%
+        AND payload::text LIKE :searchKeyword
 SQL;
 
-        return (int) $this->connection->fetchOne($sql, [
-            'date' => $searchInput->date
-        ]);
+        return (int)$this->connection->fetchOne($sql, [
+            'date' => $searchInput->date,
+            'searchKeyword' => '%' . $searchInput->keyword . '%',
+        ],
+            [\Doctrine\DBAL\ParameterType::STRING, \Doctrine\DBAL\ParameterType::STRING]);
     }
 
     public function countByType(SearchInput $searchInput): array
@@ -34,13 +38,12 @@ SQL;
             SELECT type, sum(count) as count
             FROM event
             WHERE date(create_at) = :date
-            AND payload like %{$searchInput->keyword}%
             GROUP BY type
 SQL;
-
         return $this->connection->fetchAllKeyValue($sql, [
-            'date' => $searchInput->date
-        ]);
+            'date' => $searchInput->date,
+        ],
+            [\Doctrine\DBAL\ParameterType::STRING]);
     }
 
     public function statsByTypePerHour(SearchInput $searchInput): array
@@ -49,18 +52,26 @@ SQL;
             SELECT extract(hour from create_at) as hour, type, sum(count) as count
             FROM event
             WHERE date(create_at) = :date
-            AND payload like %{$searchInput->keyword}%
+            AND payload::text like :searchKeyword
             GROUP BY TYPE, EXTRACT(hour from create_at)
 SQL;
 
-        $stats = $this->connection->fetchAll($sql, [
-            'date' => $searchInput->date
-        ]);
+        $stats = $this->connection->fetchAllAssociative($sql, [
+            'date' => $searchInput->date,
+            'searchKeyword' => $searchInput->keyword,
+        ],
+            [\Doctrine\DBAL\ParameterType::STRING, \Doctrine\DBAL\ParameterType::STRING]);
 
         $data = array_fill(0, 24, ['commit' => 0, 'pullRequest' => 0, 'comment' => 0]);
 
         foreach ($stats as $stat) {
-            $data[(int) $stat['hour']][$stat['type']] = $stat['count'];
+            $type = match ($stat['type']) {
+                EventType::COMMIT => 'commit',
+                EventType::PULL_REQUEST => 'pullRequest',
+                EventType::COMMENT => 'comment',
+            };
+            $data[(int)$stat['hour']]['hour'] = $stat['hour'];
+            $data[(int)$stat['hour']][$type] = $stat['count'];
         }
 
         return $data;
@@ -69,18 +80,20 @@ SQL;
     public function getLatest(SearchInput $searchInput): array
     {
         $sql = <<<SQL
-            SELECT type, repo
+            SELECT type, r.name
             FROM event
+            INNER JOIN repo r ON event.repo_id = r.id
             WHERE date(create_at) = :date
-            AND payload like %{$searchInput->keyword}%
+            AND payload::text like :searchKeyword
 SQL;
 
         $result = $this->connection->fetchAllAssociative($sql, [
             'date' => $searchInput->date,
-            'keyword' => $searchInput->keyword,
-        ]);
+            'searchKeyword' => $searchInput->keyword,
+        ],
+            [\Doctrine\DBAL\ParameterType::STRING, \Doctrine\DBAL\ParameterType::STRING]);
 
-        $result = array_map(static function($item) {
+        $result = array_map(static function ($item) {
             $item['repo'] = json_decode($item['repo'], true);
 
             return $item;
@@ -101,6 +114,6 @@ SQL;
             'id' => $id
         ]);
 
-        return (bool) $result;
+        return (bool)$result;
     }
 }
