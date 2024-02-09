@@ -2,12 +2,13 @@
 
 namespace App\Tests\Unit\Service\ImportGitHubEvents\Provider;
 
+use App\Service\ImportGitHubEvents\Dto\GHArchivesEventInput;
 use App\Service\ImportGitHubEvents\Provider\GHArchivesEventsProvider;
 use App\Tests\InMemory\FakeResponse;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class GHArchivesEventsProviderTest extends TestCase
+class GHArchivesEventsProviderTest extends KernelTestCase
 {
     public function testCanImportGHArchivesEvents(): void
     {
@@ -22,14 +23,15 @@ class GHArchivesEventsProviderTest extends TestCase
                 )
             )
         ;
+        $serializer = $this->getContainer()->get('serializer');
         $provider = new GHArchivesEventsProvider(
-            $client
+            $client,
+            $serializer,
         );
         $events = $provider->fetch('2015-01-01-15');
 
         self::assertNotEmpty($events);
-        self::assertIsArray($events[0]);
-        self::assertArrayHasKey('id', $events[0]);
-        self::assertSame('2489651045', $events[0]['id']);
+        self::assertInstanceOf(GHArchivesEventInput::class, $events[0]);
+        self::assertSame('2489651045', $events[0]->id);
     }
 }

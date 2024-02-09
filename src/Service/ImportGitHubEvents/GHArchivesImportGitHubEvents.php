@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Service\ImportGitHubEvents;
 
 use LogicException;
-use App\Repository\WriteEventRepository;
 use App\Service\ImportGitHubEvents\Storage\EventStore;
 use App\Service\ImportGitHubEvents\Provider\GHArchivesEventsProvider;
 use App\Service\ImportGitHubEvents\Transformer\GHArchivesEventsTransformer;

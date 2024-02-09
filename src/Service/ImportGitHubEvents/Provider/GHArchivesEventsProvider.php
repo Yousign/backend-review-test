@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace App\Service\ImportGitHubEvents\Provider;
 
+use App\Service\ImportGitHubEvents\Dto\GHArchivesEventInput;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class GHArchivesEventsProvider
 {
-    public function __construct(private HttpClientInterface $client)
-    {
+    public function __construct(
+        private HttpClientInterface $client,
+        private SerializerInterface $serializer,
+    ) {
     }
 
     /**
-     * @return array{}
+     * @return array<GHArchivesEventInput>
      */
     public function fetch(string $query): array
     {
@@ -31,7 +35,7 @@ class GHArchivesEventsProvider
         );
 
         return array_map(
-            static fn (string $line) => json_decode(json: $line, associative: true, flags: JSON_THROW_ON_ERROR),
+            fn (string $line) => $this->serializer->deserialize($line, GHArchivesEventInput::class, 'json'),
             $lines,
         );
     }
