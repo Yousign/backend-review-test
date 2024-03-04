@@ -14,7 +14,7 @@ class Repo
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="bigint")
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="NONE")
      */
     private int $id;
