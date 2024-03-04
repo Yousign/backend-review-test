@@ -13,7 +13,7 @@ class Actor
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="bigint")
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="NONE")
      */
     public int $id;
@@ -33,12 +33,12 @@ class Actor
      */
     public string $avatarUrl;
 
-    public function __construct(int $id, string $login, string $url, string $avatarUrl)
+    public function __construct(int $id, string $login, string $url, string $avatar_url)
     {
         $this->id = $id;
         $this->login = $login;
         $this->url = $url;
-        $this->avatarUrl = $avatarUrl;
+        $this->avatarUrl = $avatar_url;
     }
 
     public function id(): int

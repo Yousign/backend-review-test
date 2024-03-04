@@ -45,21 +45,21 @@ class Event
     private Repo $repo;
 
     /**
-     * @ORM\Column(type="json", nullable=false, options={"jsonb": true})
+     * @ORM\Column(type="json", nullable=false, options={"jsonb": false})
      */
     private array $payload;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=false)
      */
-    private \DateTimeImmutable $createAt;
+    private \DateTimeImmutable $createdAt;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     private ?string $comment;
 
-    public function __construct(int $id, string $type, Actor $actor, Repo $repo, array $payload, \DateTimeImmutable $createAt, ?string $comment)
+    public function __construct(int $id, string $type, Actor $actor, Repo $repo, array $payload, \DateTimeImmutable $createdAt, ?string $comment)
     {
         $this->id = $id;
         EventType::assertValidChoice($type);
@@ -67,10 +67,10 @@ class Event
         $this->actor = $actor;
         $this->repo = $repo;
         $this->payload = $payload;
-        $this->createAt = $createAt;
+        $this->createdAt = $createdAt;
         $this->comment = $comment;
 
-        if ($type === EventType::COMMIT) {
+        if ($type === EventType::COMMIT_COMMENT) {
             $this->count = $payload['size'] ?? 1;
         }
     }
@@ -100,9 +100,9 @@ class Event
         return $this->payload;
     }
 
-    public function createAt(): \DateTimeImmutable
+    public function createdAt(): \DateTimeImmutable
     {
-        return $this->createAt;
+        return $this->createdAt;
     }
 
     public function getComment(): ?string
