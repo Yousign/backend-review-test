@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Webmozart\Assert\Assert;
 
 /**
@@ -52,6 +53,7 @@ class Event
     /**
      * @ORM\Column(type="datetime_immutable", nullable=false)
      */
+    #[SerializedName('created_at')]
     private \DateTimeImmutable $createAt;
 
     /**
@@ -75,32 +77,52 @@ class Event
         }
     }
 
-    public function id(): int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function type(): string
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function getType(): string
     {
         return $this->type;
     }
 
-    public function actor(): Actor
+    public function getCount(): int
+    {
+        return $this->count;
+    }
+
+    public function getActor(): Actor
     {
         return $this->actor;
     }
 
-    public function repo(): Repo
+    public function setRepo(Repo $repo): void
+    {
+        $this->repo = $repo;
+    }
+
+    public function setActor(Actor $actor): void
+    {
+        $this->actor = $actor;
+    }
+
+    public function getRepo(): Repo
     {
         return $this->repo;
     }
 
-    public function payload(): array
+    public function getPayload(): array
     {
         return $this->payload;
     }
 
-    public function createAt(): \DateTimeImmutable
+    public function getCreateAt(): \DateTimeImmutable
     {
         return $this->createAt;
     }

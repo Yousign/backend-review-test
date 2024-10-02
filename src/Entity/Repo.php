@@ -14,7 +14,7 @@ class Repo
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="bigint")
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="NONE")
      */
     private int $id;
@@ -36,17 +36,17 @@ class Repo
         $this->url = $url;
     }
 
-    public function id(): int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function name(): string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function url(): string
+    public function getUrl(): string
     {
         return $this->url;
     }
