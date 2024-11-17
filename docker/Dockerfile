@@ -34,6 +34,8 @@ RUN apk add --no-cache bash && \
     curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.alpine.sh' | bash && \
     apk add symfony-cli
 
+RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
+
 USER docker:docker
 
 EXPOSE 8000

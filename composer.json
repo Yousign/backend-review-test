@@ -18,13 +18,15 @@
         "symfony/dotenv": "^6.4.12",
         "symfony/flex": "^2.4.7",
         "symfony/framework-bundle": "^6.4.12",
+        "symfony/http-client": "^6.4",
         "symfony/property-access": "^6.4.11",
         "symfony/property-info": "^6.4.10",
         "symfony/proxy-manager-bridge": "^6.4.8",
         "symfony/runtime": "^6.4.12",
         "symfony/serializer": "^6.4.12",
         "symfony/validator": "^6.4.12",
-        "symfony/yaml": "^6.4.12"
+        "symfony/yaml": "^6.4.12",
+        "ext-zlib": "*"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.6.1",

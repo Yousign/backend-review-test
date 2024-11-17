@@ -15,4 +15,12 @@ class EventType extends AbstractEnumType
         self::COMMENT => 'Comment',
         self::PULL_REQUEST => 'Pull Request',
     ];
+
+    public static array $eventTypeMapping = [
+        'PushEvent' => self::COMMIT,
+        'PullRequestEvent' => self::PULL_REQUEST,
+        'CommitCommentEvent' => self::COMMENT,
+        'IssueCommentEvent' => self::COMMENT,
+        'PullRequestReviewCommentEvent' => self::COMMENT
+    ];
 }

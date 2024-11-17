@@ -18,6 +18,8 @@ services:
       POSTGRES_USER: yousign
       POSTGRES_PASSWORD: 123456789
       POSTGRES_DB: gh-archive-keyword
+    ports:
+      - "5432:5432"
 
 #   image: postgres:${POSTGRES_VERSION:-14}-alpine
 #   environment:
