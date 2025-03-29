@@ -18,7 +18,7 @@ RUN USER=docker && \
 
 # Install waitforit (https://github.com/maxcnunes/waitforit)
 RUN \
-    wget -O /usr/local/bin/waitforit https://github.com/maxcnunes/waitforit/releases/download/v2.4.1/waitforit-linux_amd64 && \
+    wget -O /usr/local/bin/waitforit https://github.com/maxclaus/waitforit/releases/download/v2.4.1/waitforit-linux_amd64 && \
     chmod +x /usr/local/bin/waitforit
 
 # Install make
