@@ -7,6 +7,7 @@ use App\Repository\ReadEventRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
 readonly class SearchController
@@ -18,7 +19,7 @@ readonly class SearchController
     #[Route(path: '/api/search', name: 'api_search', methods: ['GET'])]
     public function searchCommits(Request $request): JsonResponse
     {
-        $searchInput = $this->serializer->denormalize($request->query->all(), SearchInput::class);
+        $searchInput = $this->serializer->deserialize($request->query->all(), SearchInput::class, JsonEncoder::FORMAT);
 
         $countByType = $this->repository->countByType($searchInput);
 

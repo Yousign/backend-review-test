@@ -13,7 +13,7 @@ class Actor
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'NONE')]
     #[ORM\Id]
-    public int $id;
+    public string $id;
 
     #[ORM\Column]
     public string $login;
@@ -26,13 +26,13 @@ class Actor
 
     public function __construct(int $id, string $login, string $url, string $avatarUrl)
     {
-        $this->id = $id;
+        $this->id = (string) $id;
         $this->login = $login;
         $this->url = $url;
         $this->avatarUrl = $avatarUrl;
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->id;
     }
@@ -52,6 +52,9 @@ class Actor
         return $this->avatarUrl;
     }
 
+    /**
+     * @param array{id: int, login: string, url: string, avatar_url: string} $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(

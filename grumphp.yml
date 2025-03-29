@@ -25,11 +25,17 @@ grumphp:
             keywords:
                 - "dump("
         phpcsfixer:
-          allow_risky: true
-          config: .php-cs-fixer.dist.php
-          config_contains_finder: true
-          verbose: true
-          diff: false
-          triggered_by: ['php']
+            allow_risky: true
+            config: .php-cs-fixer.dist.php
+            config_contains_finder: true
+            verbose: true
+            diff: false
+            triggered_by: ['php']
         composer:
-          file: ./composer.json
+            file: ./composer.json
+        phpstan:
+            autoload_file: ~
+        make:
+            make_file: ~
+            task: test
+            triggered_by: [php]

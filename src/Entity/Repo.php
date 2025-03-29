@@ -13,7 +13,7 @@ class Repo
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'NONE')]
     #[ORM\Id]
-    private int $id;
+    private string $id;
 
     #[ORM\Column]
     public string $name;
@@ -23,12 +23,12 @@ class Repo
 
     public function __construct(int $id, string $name, string $url)
     {
-        $this->id = $id;
+        $this->id = (string) $id;
         $this->name = $name;
         $this->url = $url;
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->id;
     }
@@ -43,6 +43,9 @@ class Repo
         return $this->url;
     }
 
+    /**
+     * @param array{id: int, name: string, url: string} $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(

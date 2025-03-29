@@ -15,7 +15,7 @@ class Event
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'NONE')]
     #[ORM\Id]
-    private int $id;
+    private string $id;
 
     #[ORM\Column(type: 'EventType', nullable: false)]
     private string $type;
@@ -23,14 +23,17 @@ class Event
     #[ORM\Column(type: 'integer', nullable: false)]
     private int $count = 1;
 
-    #[ORM\JoinColumn(name: 'actor_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'actor_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: Actor::class, cascade: ['persist'])]
     private Actor $actor;
 
-    #[ORM\JoinColumn(name: 'repo_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'repo_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: Repo::class, cascade: ['persist'])]
     private Repo $repo;
 
+    /**
+     * @var array<string, mixed> $payload
+     */
     #[ORM\Column(type: 'json', options: ['jsonb' => true])]
     private array $payload;
 
@@ -40,9 +43,12 @@ class Event
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $comment;
 
+    /**
+     * @param array<string, mixed> $payload
+     */
     public function __construct(int $id, string $type, Actor $actor, Repo $repo, array $payload, DateTimeImmutable $createAt, ?string $comment)
     {
-        $this->id = $id;
+        $this->id = (string) $id;
         EventType::assertValidChoice($type);
         $this->type = $type;
         $this->actor = $actor;
@@ -52,11 +58,11 @@ class Event
         $this->comment = $comment;
 
         if (EventType::COMMIT === $type) {
-            $this->count = $payload['size'] ?? 1;
+            $this->count = isset($payload['size']) && \is_int($payload['size']) ? $payload['size'] : 1;
         }
     }
 
-    public function id(): int
+    public function id(): string
     {
         return $this->id;
     }
@@ -76,6 +82,9 @@ class Event
         return $this->repo;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function payload(): array
     {
         return $this->payload;

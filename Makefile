@@ -109,3 +109,5 @@ func-test: var/docker.up ## Run PhpUnit functionnal testsuite
 	@$(call log,Running ...)
 	$(PHP_EXEC) bin/phpunit -v --testsuite func --testdox
 	@$(call log_success,Done)
+
+test: db-test unit-test func-test
