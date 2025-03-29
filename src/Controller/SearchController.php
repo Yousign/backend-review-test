@@ -9,22 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class SearchController
+readonly class SearchController
 {
-    private ReadEventRepository $repository;
-    private SerializerInterface $serializer;
-
-    public function __construct(
-        ReadEventRepository $repository,
-        SerializerInterface $serializer,
-    ) {
-        $this->repository = $repository;
-        $this->serializer = $serializer;
+    public function __construct(private ReadEventRepository $repository, private SerializerInterface $serializer)
+    {
     }
 
-    /**
-     * @Route(path="/api/search", name="api_search", methods={"GET"})
-     */
+    #[Route(path: '/api/search', name: 'api_search', methods: ['GET'])]
     public function searchCommits(Request $request): JsonResponse
     {
         $searchInput = $this->serializer->denormalize($request->query->all(), SearchInput::class);

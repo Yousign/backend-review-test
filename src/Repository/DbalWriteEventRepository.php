@@ -5,13 +5,10 @@ namespace App\Repository;
 use App\Dto\EventInput;
 use Doctrine\DBAL\Connection;
 
-class DbalWriteEventRepository implements WriteEventRepository
+readonly class DbalWriteEventRepository implements WriteEventRepository
 {
-    private Connection $connection;
-
-    public function __construct(Connection $connection)
+    public function __construct(private Connection $connection)
     {
-        $this->connection = $connection;
     }
 
     public function update(EventInput $authorInput, int $id): void
