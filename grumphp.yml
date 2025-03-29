@@ -24,3 +24,10 @@ grumphp:
         git_blacklist:
             keywords:
                 - "dump("
+        phpcsfixer:
+          allow_risky: true
+          config: .php-cs-fixer.dist.php
+          config_contains_finder: true
+          verbose: true
+          diff: false
+          triggered_by: ['php']

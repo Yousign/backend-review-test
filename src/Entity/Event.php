@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use Webmozart\Assert\Assert;
 
 /**
  * @ORM\Entity()
+ *
  * @ORM\Table(name="`event`",
  *    indexes={@ORM\Index(name="IDX_EVENT_TYPE", columns={"type"})}
  * )
@@ -17,7 +18,9 @@ class Event
 {
     /**
      * @ORM\Id
+     *
      * @ORM\Column(type="bigint")
+     *
      * @ORM\GeneratedValue(strategy="NONE")
      */
     private int $id;
@@ -34,12 +37,14 @@ class Event
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Actor", cascade={"persist"})
+     *
      * @ORM\JoinColumn(name="actor_id", referencedColumnName="id")
      */
     private Actor $actor;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Repo", cascade={"persist"})
+     *
      * @ORM\JoinColumn(name="repo_id", referencedColumnName="id")
      */
     private Repo $repo;
@@ -52,14 +57,14 @@ class Event
     /**
      * @ORM\Column(type="datetime_immutable", nullable=false)
      */
-    private \DateTimeImmutable $createAt;
+    private DateTimeImmutable $createAt;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     private ?string $comment;
 
-    public function __construct(int $id, string $type, Actor $actor, Repo $repo, array $payload, \DateTimeImmutable $createAt, ?string $comment)
+    public function __construct(int $id, string $type, Actor $actor, Repo $repo, array $payload, DateTimeImmutable $createAt, ?string $comment)
     {
         $this->id = $id;
         EventType::assertValidChoice($type);
@@ -70,7 +75,7 @@ class Event
         $this->createAt = $createAt;
         $this->comment = $comment;
 
-        if ($type === EventType::COMMIT) {
+        if (EventType::COMMIT === $type) {
             $this->count = $payload['size'] ?? 1;
         }
     }
@@ -100,7 +105,7 @@ class Event
         return $this->payload;
     }
 
-    public function createAt(): \DateTimeImmutable
+    public function createAt(): DateTimeImmutable
     {
         return $this->createAt;
     }

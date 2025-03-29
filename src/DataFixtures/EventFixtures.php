@@ -6,6 +6,7 @@ use App\Entity\Actor;
 use App\Entity\Event;
 use App\Entity\EventType;
 use App\Entity\Repo;
+use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -32,7 +33,7 @@ class EventFixtures extends Fixture
                 'https://api.github.com/repos/yousign/backend-test'
             ),
             [],
-            new \DateTimeImmutable(),
+            new DateTimeImmutable(),
             'Test comment initiate by fixture '
         );
 

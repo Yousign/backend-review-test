@@ -6,8 +6,8 @@ use App\Dto\EventInput;
 use App\Repository\ReadEventRepository;
 use App\Repository\WriteEventRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -21,7 +21,7 @@ class EventController
     public function __construct(
         WriteEventRepository $writeEventRepository,
         ReadEventRepository $readEventRepository,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
     ) {
         $this->writeEventRepository = $writeEventRepository;
         $this->readEventRepository = $readEventRepository;
@@ -44,16 +44,16 @@ class EventController
             );
         }
 
-        if($this->readEventRepository->exist($id) === false) {
+        if (false === $this->readEventRepository->exist($id)) {
             return new JsonResponse(
-                ['message' => sprintf('Event identified by %d not found !', $id)],
+                ['message' => \sprintf('Event identified by %d not found !', $id)],
                 Response::HTTP_NOT_FOUND
             );
         }
 
         try {
             $this->writeEventRepository->update($eventInput, $id);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return new Response(null, Response::HTTP_SERVICE_UNAVAILABLE);
         }
 
