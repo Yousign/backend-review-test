@@ -1,0 +1,26 @@
+grumphp:
+    parallel:
+        enabled: true
+        max_workers: 32
+    tasks:
+        git_commit_message:
+            enforce_capitalized_subject: false
+            enforce_no_subject_punctuations: false
+            matchers:
+                Conventional: '/^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\(\w+\))?:\s.{1,}/'
+            case_insensitive: false
+            multiline: false
+            max_body_width: 0
+            max_subject_width: 0
+        git_branch_name:
+            whitelist:
+                - '/^feature\/[a-z0-9\-_]+$/'
+                - '/^bugfix\/[a-z0-9\-_]+$/'
+                - '/^hotfix\/[a-z0-9\-_]+$/'
+                - '/^release\/[0-9]+\.[0-9]+(\.[0-9]+)?$/'
+            blacklist:
+                - "develop"
+                - "main"
+        git_blacklist:
+            keywords:
+                - "dump("
