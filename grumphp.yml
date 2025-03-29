@@ -31,3 +31,5 @@ grumphp:
           verbose: true
           diff: false
           triggered_by: ['php']
+        composer:
+          file: ./composer.json

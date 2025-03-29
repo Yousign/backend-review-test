@@ -28,6 +28,9 @@ RUN apk add --no-cache make
 RUN apk add --no-cache postgresql-dev bash \
     && docker-php-ext-install -j$(nproc) pdo_pgsql
 
+# Increase Memory Limit
+RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini
+
 # Installing Symfony CLI
 ENV SYMFONY_ALLOW_ALL_IP=true
 RUN apk add --no-cache bash && \
