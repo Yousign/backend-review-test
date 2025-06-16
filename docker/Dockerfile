@@ -31,7 +31,8 @@ RUN apk add --no-cache postgresql-dev bash \
 # Installing Symfony CLI
 ENV SYMFONY_ALLOW_ALL_IP=true
 RUN apk add --no-cache bash && \
-    curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.alpine.sh' | bash && \
+    curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.alpine.sh' | \
+    distro=alpine version=3.18.0 bash && \
     apk add symfony-cli
 
 USER docker:docker
