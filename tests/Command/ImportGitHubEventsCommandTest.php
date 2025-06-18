@@ -17,11 +17,11 @@ class ImportGitHubEventsCommandTest extends KernelTestCase
         $commandTester = new CommandTester($command);
 
         $exitCode = $commandTester->execute([
-            'url' => null, // simulate missing or invalid URL
+            'url' => "", // simulate missing or invalid URL
         ]);
 
         $this->assertSame(1, $exitCode);
-        $this->assertStringContainsString('❌ Invalid URL provided', $commandTester->getDisplay());
+        $this->assertStringContainsString('Invalid URL: scheme is missing in ', $commandTester->getDisplay());
     }
 
     public function testExecuteWithFakeValidUrl(): void

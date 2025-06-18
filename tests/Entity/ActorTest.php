@@ -18,9 +18,9 @@ class ActorTest extends TestCase
 
         $actor = ActorFactory::fromArray($data);
 
-        $this->assertSame(123, $actor->id());
-        $this->assertSame('ben-dev', $actor->login());
-        $this->assertSame('https://github.com/ben-dev', $actor->url());
-        $this->assertSame('https://avatars.githubusercontent.com/u/123?v=4', $actor->avatarUrl());
+        $this->assertSame(123, $actor->getId());
+        $this->assertSame('ben-dev', $actor->getLogin());
+        $this->assertSame('https://github.com/ben-dev', $actor->getUrl());
+        $this->assertSame('https://avatars.githubusercontent.com/u/123?v=4', $actor->getAvatarUrl());
     }
 }

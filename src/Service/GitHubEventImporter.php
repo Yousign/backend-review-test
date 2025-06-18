@@ -55,6 +55,7 @@ readonly class GitHubEventImporter
         $lines = explode("\n", $content);
         $imported = 0;
 
+
         foreach ($lines as $line) {
             if ('' === trim($line)) {
                 $this->logger->warning("⚠️ Empty line found in data, skipping.");
@@ -63,8 +64,15 @@ readonly class GitHubEventImporter
 
             /** @var array<string, mixed>|null $raw */
             $raw = json_decode($line, true);
-            if (!is_array($raw) || !$this->isSupported($raw) || !is_int($raw['id']) || !is_string($raw['type']) || !is_string($raw['created_at'])) {
+            if (!is_array($raw) || !$this->isSupported($raw)  || !is_string($raw['type']) || !is_string($raw['created_at'])) {
                 $this->logger->warning("⚠️ Unsupported event data: " . json_encode($raw));
+                continue;
+            }
+            if(isset($raw['id']) && is_string($raw['id'])) {
+                $raw['id'] = intval($raw['id']);
+            }
+            else{
+                $this->logger->warning("⚠️ Event ID is missing or not a valid integer, skipping event.");
                 continue;
             }
 
@@ -113,9 +121,14 @@ readonly class GitHubEventImporter
 
                 /** @var array<string, mixed> $payload */
                 $payload = is_array($raw['payload'] ?? null) ? $raw['payload'] : [];
-
                 $comment = null;
-                if (is_array($payload['comment']) && isset($payload['comment']['body']) && is_string($payload['comment']['body'])) {
+                if (
+                    !empty($payload) &&
+                    isset($payload['comment']) &&
+                    is_array($payload['comment']) &&
+                    isset($payload["comment"]['body']) &&
+                    is_string($payload['comment']['body']))
+                {
                     $comment = $payload['comment']['body'];
                 }
 
@@ -143,7 +156,12 @@ readonly class GitHubEventImporter
             }
         }
 
-        $this->entityManager->flush();
+        if ($imported > 0) {
+            $this->entityManager->flush();
+            $this->logger->info("✅ Successfully imported $imported events from GitHub archive.");
+        } else {
+            $this->logger->info("No valid events found to import from GitHub archive.");
+        }
         return $imported;
     }
 

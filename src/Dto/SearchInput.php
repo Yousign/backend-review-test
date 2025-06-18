@@ -4,15 +4,10 @@ namespace App\Dto;
 
 use DateTimeImmutable;
 
-class SearchInput
+readonly class SearchInput
 {
-    /**
-     * @var DateTimeImmutable
-     */
-    public DateTimeImmutable $date;
-
-    /**
-     * @var string
-     */
-    public string $keyword;
+    public function __construct(
+        public ?DateTimeImmutable $date = null,
+        public string $keyword = ''
+    ) {}
 }

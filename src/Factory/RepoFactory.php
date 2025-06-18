@@ -3,6 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\Repo;
+use InvalidArgumentException;
 
 class RepoFactory
 {
@@ -17,6 +18,9 @@ class RepoFactory
      */
     public static function fromArray(array $data): Repo
     {
+        if (!isset($data['id'], $data['name'], $data['url'])) {
+            throw new InvalidArgumentException('Missing required Repo keys in data array');
+        }
         return new Repo(
             (int) $data['id'],
             $data['name'],

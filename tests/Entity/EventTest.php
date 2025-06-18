@@ -22,12 +22,12 @@ class EventTest extends TestCase
 
         $event = new Event(100, EventType::COMMENT, $actor, $repo, $payload, $createdAt, $comment);
 
-        $this->assertSame(100, $event->id());
-        $this->assertSame(EventType::COMMENT, $event->type());
-        $this->assertSame($actor, $event->actor());
-        $this->assertSame($repo, $event->repo());
-        $this->assertSame($payload, $event->payload());
-        $this->assertSame($createdAt, $event->createAt());
+        $this->assertSame(100, $event->getId());
+        $this->assertSame(EventType::COMMENT, $event->getType());
+        $this->assertSame($actor, $event->getActor());
+        $this->assertSame($repo, $event->getRepo());
+        $this->assertSame($payload, $event->getPayload());
+        $this->assertSame($createdAt, $event->getCreatedAt());
         $this->assertSame($comment, $event->getComment());
     }
 

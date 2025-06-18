@@ -4,40 +4,40 @@ namespace App\Controller;
 
 use App\Dto\SearchInput;
 use App\Repository\ReadEventRepository;
+use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class SearchController
+readonly class SearchController
 {
-    private ReadEventRepository $repository;
-    private SerializerInterface $serializer;
 
     public function __construct(
-        ReadEventRepository $repository,
-        SerializerInterface  $serializer
+        private ReadEventRepository $repository,
+        private SerializerInterface  $serializer
     ) {
-        $this->repository = $repository;
-        $this->serializer = $serializer;
     }
 
     /**
-     * @Route(path="/api/search", name="api_search", methods={"GET"})
+     * @throws Exception
      */
+    #[Route(path: '/api/search', name: 'api_search', methods: ['GET'])]
     public function searchCommits(Request $request): JsonResponse
     {
-        assert(method_exists($this->serializer, 'denormalize'), 'SerializerInterface must implement denormalize method');
+        assert($this->serializer instanceof Serializer, 'SerializerInterface should be an instance of Serializer');
         $searchInput = $this->serializer->denormalize($request->query->all(), SearchInput::class);
 
+        assert($searchInput instanceof SearchInput, 'Denormalized object should be an instance of SearchInput');
         $countByType = $this->repository->countByType($searchInput);
-
         $data = [
             'meta' => [
                 'totalEvents' => $this->repository->countAll($searchInput),
-                'totalPullRequests' => $countByType['pullRequest'] ?? 0,
-                'totalCommits' => $countByType['commit'] ?? 0,
-                'totalComments' => $countByType['comment'] ?? 0,
+                'totalPullRequests' => $countByType['PR'] ?? 0,
+                'totalCommits' => $countByType['COM'] ?? 0,
+                'totalComments' => $countByType['MSG'] ?? 0,
             ],
             'data' => [
                 'events' => $this->repository->getLatest($searchInput),
@@ -45,6 +45,6 @@ class SearchController
             ]
         ];
 
-        return new JsonResponse($data);
+        return new JsonResponse($data, Response::HTTP_OK);
     }
 }

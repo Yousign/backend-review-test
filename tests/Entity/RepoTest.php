@@ -17,8 +17,8 @@ class RepoTest extends TestCase
 
         $repo = RepoFactory::fromArray($data);
 
-        $this->assertSame(456, $repo->id());
-        $this->assertSame('ben/repo', $repo->name());
-        $this->assertSame('https://github.com/ben/repo', $repo->url());
+        $this->assertSame(456, $repo->getId());
+        $this->assertSame('ben/repo', $repo->getName());
+        $this->assertSame('https://github.com/ben/repo', $repo->getUrl());
     }
 }
