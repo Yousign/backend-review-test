@@ -119,11 +119,10 @@ readonly class GitHubEventImporter
                     continue;
                 }
 
-                /** @var array<string, mixed> $payload */
+                /** @var array<string, string|int|array<string,string|int|array<string,string|int>>> $payload */
                 $payload = is_array($raw['payload'] ?? null) ? $raw['payload'] : [];
                 $comment = null;
                 if (
-                    !empty($payload) &&
                     isset($payload['comment']) &&
                     is_array($payload['comment']) &&
                     isset($payload["comment"]['body']) &&
