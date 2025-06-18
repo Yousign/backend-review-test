@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+# ~ PHP variables
+MEMORY_LIMIT="-1"
+
+# ~ PHPStan variables
+PHPSTAN_CONFIG_PATH="phpstan.dist.neon"
+PHPSTAN_PHAR_PATH="vendor/phpstan/phpstan/phpstan"
+
+php -d memory_limit="${MEMORY_LIMIT}" "${PHPSTAN_PHAR_PATH}" analyse -c "${PHPSTAN_CONFIG_PATH}" --memory-limit="${MEMORY_LIMIT}"

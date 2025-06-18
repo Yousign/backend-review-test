@@ -6,6 +6,8 @@ use App\Entity\Actor;
 use App\Entity\Event;
 use App\Entity\EventType;
 use App\Entity\Repo;
+use App\Factory\ActorFactory;
+use App\Factory\RepoFactory;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -61,7 +63,7 @@ readonly class GitHubEventImporter
 
             /** @var array<string, mixed>|null $raw */
             $raw = json_decode($line, true);
-            if (!is_array($raw) || !$this->isSupported($raw)) {
+            if (!is_array($raw) || !$this->isSupported($raw) || !is_int($raw['id']) || !is_string($raw['type']) || !is_string($raw['created_at'])) {
                 $this->logger->warning("⚠️ Unsupported event data: " . json_encode($raw));
                 continue;
             }
@@ -74,13 +76,13 @@ readonly class GitHubEventImporter
                 }
 
                 $actorId = $actorData['id'];
-                if ($actorId <= 0) {
+                if (is_int($actorId) && $actorId <= 0 ) {
                     $this->logger->warning("⚠️ Invalid actor ID: $actorId, skipping event.");
                     continue;
                 }
 
                 $actor = $this->entityManager->getRepository(Actor::class)->find($actorId)
-                    ?? Actor::fromArray($actorData);
+                    ?? ActorFactory::fromArray($actorData);
                 $this->entityManager->persist($actor);
 
                 $repoData = $raw['repo'];
@@ -90,16 +92,20 @@ readonly class GitHubEventImporter
                 }
 
                 $repoId = $repoData['id'];
-                if ($repoId <= 0) {
+                if (is_int($repoId) && $repoId <= 0) {
                     $this->logger->warning("⚠️ Invalid repo ID: $repoId, skipping event.");
                     continue;
                 }
 
                 $repo = $this->entityManager->getRepository(Repo::class)->find($repoId)
-                    ?? Repo::fromArray($repoData);
+                    ?? RepoFactory::fromArray($repoData);
                 $this->entityManager->persist($repo);
 
                 $eventId = $raw['id'];
+                if($eventId <= 0) {
+                    $this->logger->warning("⚠️ Invalid event ID : $eventId, skipping event.");
+                    continue;
+                }
                 if ($this->entityManager->getRepository(Event::class)->find($eventId)) {
                     $this->logger->info("ℹ️ Event ID $eventId already exists. Skipping.");
                     continue;
@@ -132,7 +138,7 @@ readonly class GitHubEventImporter
                 }
 
             } catch (Throwable $e) {
-                $this->logger->error('❌ Failed to import event ID ' . ($raw['id'] ?? 'UNKNOWN') . ': ' . $e->getMessage());
+                $this->logger->error("❌ Failed to import event ID : ". $raw["id"] . " => " . $e->getMessage());
                 $this->logger->debug('Payload causing failure: ' . json_encode($raw));
             }
         }
