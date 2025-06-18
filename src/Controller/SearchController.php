@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Dto\SearchInput;
 use App\Repository\ReadEventRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,6 +27,7 @@ class SearchController
      */
     public function searchCommits(Request $request): JsonResponse
     {
+        assert(method_exists($this->serializer, 'denormalize'), 'SerializerInterface must implement denormalize method');
         $searchInput = $this->serializer->denormalize($request->query->all(), SearchInput::class);
 
         $countByType = $this->repository->countByType($searchInput);

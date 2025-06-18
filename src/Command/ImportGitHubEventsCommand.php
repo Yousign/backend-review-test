@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Service\GitHubEventImporter;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
-/**
- * This command must import GitHub events.
- * You can add the parameters and code you want in this command to meet the need.
- */
+#[AsCommand(
+    name: 'app:import-github-events',
+    description: 'Import GitHub events from GH Archive'
+)]
 class ImportGitHubEventsCommand extends Command
 {
-    protected static $defaultName = 'app:import-github-events';
 
     public function __construct(
         private readonly GitHubEventImporter $importer
@@ -27,8 +27,6 @@ class ImportGitHubEventsCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            ->setDescription('Import GH events');
         $this
             ->addArgument('url', InputArgument::REQUIRED, 'The URL of the .json.gz file from GH Archive');
 

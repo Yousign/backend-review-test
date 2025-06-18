@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use Webmozart\Assert\Assert;
 
 /**
  * @ORM\Entity()
@@ -46,20 +46,32 @@ class Event
 
     /**
      * @ORM\Column(type="json", nullable=false, options={"jsonb": true})
+     * @var array<string, mixed>
      */
     private array $payload;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=false)
      */
-    private \DateTimeImmutable $createAt;
+    private DateTimeImmutable $createAt;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     private ?string $comment;
 
-    public function __construct(int $id, string $type, Actor $actor, Repo $repo, array $payload, \DateTimeImmutable $createAt, ?string $comment)
+    /**
+     * Event constructor.
+     *
+     * @param int $id
+     * @param string $type
+     * @param Actor $actor
+     * @param Repo $repo
+     * @param array<string, mixed> $payload
+     * @param DateTimeImmutable $createAt
+     * @param string|null $comment
+     */
+    public function __construct(int $id, string $type, Actor $actor, Repo $repo, array $payload, DateTimeImmutable $createAt, ?string $comment)
     {
         $this->id = $id;
         EventType::assertValidChoice($type);
@@ -71,7 +83,12 @@ class Event
         $this->comment = $comment;
 
         if ($type === EventType::COMMIT) {
-            $this->count = $payload['size'] ?? 1;
+            if(!is_int($payload['size'])) {
+                $this->count = 1;
+            }
+            else{
+                $this->count = $payload['size'];
+            }
         }
     }
 
@@ -95,12 +112,18 @@ class Event
         return $this->repo;
     }
 
+
+    /**
+     * Get the payload of the event.
+     *
+     * @return array<string, mixed>
+     */
     public function payload(): array
     {
         return $this->payload;
     }
 
-    public function createAt(): \DateTimeImmutable
+    public function createAt(): DateTimeImmutable
     {
         return $this->createAt;
     }
@@ -108,5 +131,10 @@ class Event
     public function getComment(): ?string
     {
         return $this->comment;
+    }
+
+    public function count(): int
+    {
+        return $this->count;
     }
 }

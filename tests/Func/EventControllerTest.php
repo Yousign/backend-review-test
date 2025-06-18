@@ -3,22 +3,24 @@
 namespace App\Tests\Func;
 
 use App\DataFixtures\EventFixtures;
-use App\Entity\Event;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 class EventControllerTest extends WebTestCase
 {
     protected AbstractDatabaseTool $databaseTool;
-    private static $client;
+    private static KernelBrowser $client;
 
     protected function setUp(): void
     {
-        static::$client = static::createClient();
+        self::$client = static::createClient();
 
         $entityManager = static::getContainer()->get('doctrine.orm.entity_manager');
+        assert($entityManager instanceof EntityManagerInterface);
         $metaData = $entityManager->getMetadataFactory()->getAllMetadata();
         $schemaTool = new SchemaTool($entityManager);
         $schemaTool->updateSchema($metaData);
@@ -30,9 +32,9 @@ class EventControllerTest extends WebTestCase
         );
     }
 
-    public function testUpdateShouldReturnEmptyResponse()
+    public function testUpdateShouldReturnEmptyResponse(): void
     {
-        $client = static::$client;
+        $client = self::$client;
 
         $client->request(
             'PUT',
@@ -40,16 +42,15 @@ class EventControllerTest extends WebTestCase
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
-            json_encode(['comment' => 'It‘s a test comment !!!!!!!!!!!!!!!!!!!!!!!!!!!'])
+            $this->assertVariableIsString(json_encode(['comment' => 'It‘s a test comment !!!!!!!!!!!!!!!!!!!!!!!!!!!']))
         );
 
         $this->assertResponseStatusCodeSame(204);
     }
 
-
-    public function testUpdateShouldReturnHttpNotFoundResponse()
+    public function testUpdateShouldReturnHttpNotFoundResponse(): void
     {
-        $client = static::$client;
+        $client = self::$client;
 
         $client->request(
             'PUT',
@@ -57,7 +58,7 @@ class EventControllerTest extends WebTestCase
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
-            json_encode(['comment' => 'It‘s a test comment !!!!!!!!!!!!!!!!!!!!!!!!!!!'])
+            $this->assertVariableIsString(json_encode(['comment' => 'It‘s a test comment !!!!!!!!!!!!!!!!!!!!!!!!!!!']))
         );
 
         $this->assertResponseStatusCodeSame(404);
@@ -68,15 +69,15 @@ class EventControllerTest extends WebTestCase
               }
             JSON;
 
-        self::assertJsonStringEqualsJsonString($expectedJson, $client->getResponse()->getContent());
+        self::assertJsonStringEqualsJsonString($expectedJson, $this->assertVariableIsString($client->getResponse()->getContent()));
     }
 
     /**
      * @dataProvider providePayloadViolations
      */
-    public function testUpdateShouldReturnBadRequest(string $payload, string $expectedResponse)
+    public function testUpdateShouldReturnBadRequest(string $payload, string $expectedResponse): void
     {
-        $client = static::$client;
+        $client = self::$client;
 
         $client->request(
             'PUT',
@@ -88,18 +89,19 @@ class EventControllerTest extends WebTestCase
         );
 
         self::assertResponseStatusCodeSame(400);
-        self::assertJsonStringEqualsJsonString($expectedResponse, $client->getResponse()->getContent());
-
+        self::assertJsonStringEqualsJsonString($expectedResponse, $this->assertVariableIsString($client->getResponse()->getContent()));
     }
 
+    /**
+     * @return iterable<array{string, string}>
+     */
     public function providePayloadViolations(): iterable
     {
         yield 'comment too short' => [
             <<<JSON
               {
                 "comment": "short"
-                
-            }
+              }
             JSON,
             <<<JSON
                 {
@@ -107,5 +109,13 @@ class EventControllerTest extends WebTestCase
                 }
             JSON
         ];
+    }
+
+    private function assertVariableIsString(string|false $expected):string
+    {
+        if ($expected === false) {
+            return "";
+        }
+        return $expected;
     }
 }
