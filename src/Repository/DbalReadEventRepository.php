@@ -19,7 +19,7 @@ class DbalReadEventRepository implements ReadEventRepository
         $sql = <<<SQL
         SELECT sum(count) as count
         FROM event
-        WHERE date(create_at) = :date
+        WHERE date(created_at) = :date
         AND payload like :keyword
 SQL;
 
@@ -34,7 +34,7 @@ SQL;
         $sql = <<<SQL
             SELECT type, sum(count) as count
             FROM event
-            WHERE date(create_at) = :date
+            WHERE date(created_at) = :date
             AND payload like :keyword
             GROUP BY type
 SQL;
@@ -48,11 +48,11 @@ SQL;
     public function statsByTypePerHour(SearchInput $searchInput): array
     {
         $sql = <<<SQL
-            SELECT extract(hour from create_at) as hour, type, sum(count) as count
+            SELECT extract(hour from created_at) as hour, type, sum(count) as count
             FROM event
-            WHERE date(create_at) = :date
+            WHERE date(created_at) = :date
             AND payload like :keyword
-            GROUP BY TYPE, EXTRACT(hour from create_at)
+            GROUP BY TYPE, EXTRACT(hour from created_at)
 SQL;
 
         $stats = $this->connection->fetchAll($sql, [
@@ -74,7 +74,7 @@ SQL;
         $sql = <<<SQL
             SELECT type, repo
             FROM event
-            WHERE date(create_at) = :date
+            WHERE date(created_at) = :date
             AND payload like :keyword
 SQL;
 
