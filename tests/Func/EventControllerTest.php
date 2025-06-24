@@ -85,17 +85,16 @@ class EventControllerTest extends WebTestCase
 
         self::assertResponseStatusCodeSame(400);
         self::assertJsonStringEqualsJsonString($expectedResponse, $client->getResponse()->getContent());
-
     }
 
     public function providePayloadViolations(): iterable
     {
         yield 'comment too short' => [
             json_encode([
-            "comment" => "short"
+                "comment" => "short"
             ]),
             json_encode([
-            "message" => "This value is too short. It should have 20 characters or more."
+                "message" => "This value is too short. It should have 20 characters or more."
             ])
         ];
     }
