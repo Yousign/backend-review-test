@@ -58,10 +58,11 @@ class SearchController
                 Response::HTTP_BAD_REQUEST
             );
         } catch (\Exception $exception) {
-            // Log the exception
+            // Log the exception (eg Sentry, Datadog)
+
             // Return a JSON response with a generic error message
             return new JsonResponse(
-                ['message' => 'Internal server error: ' . $exception->getMessage()],
+                ['message' => 'Internal server error. Please contact support.'],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
