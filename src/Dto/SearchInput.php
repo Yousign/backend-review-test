@@ -2,15 +2,22 @@
 
 namespace App\Dto;
 
-class SearchInput
-{
-    /**
-     * @var \DateTimeImmutable
-     */
-    public $date;
+use Symfony\Component\Validator\Constraints as Assert;
 
-    /**
-     * @var string
-     */
-    public $keyword;
+final readonly class SearchInput
+{
+    public function __construct(
+        #[Assert\Date]
+        #[Assert\NotBlank]
+        public ?string $date,
+
+        public ?string $keyword,
+
+        #[Assert\GreaterThanOrEqual(1)]
+        public int $page = 1,
+
+        #[Assert\Range(min: 1, max: 100)]
+        public int $itemsPerPage = 10,
+    ) {
+    }
 }

@@ -4,14 +4,11 @@ namespace App\Dto;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class EventInput
+final readonly class EventInput
 {
-    /**
-     * @Assert\Length(min=20)
-     */
-    public ?string $comment;
-
-    public function __construct(?string $comment) {
-        $this->comment = $comment;
+    public function __construct(
+        #[Assert\Length(min: 20)]
+        public ?string $comment = null
+    ) {
     }
 }

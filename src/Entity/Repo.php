@@ -6,27 +6,19 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity()
- * @ORM\Table(name="repo")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'repo')]
 class Repo
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="bigint")
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private int $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
+    private readonly int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     public string $name;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     public string $url;
 
     public function __construct(int $id, string $name, string $url)
@@ -54,9 +46,9 @@ class Repo
     public static function fromArray(array $data): self
     {
         return new self(
-            (int) $data['id'],
-            $data['name'],
-            $data['url']
+            id: (int) $data['id'],
+            name: $data['name'],
+            url: $data['url']
         );
     }
 }
