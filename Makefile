@@ -47,7 +47,7 @@ pull: ## Pulling docker images
 	@$(call log_success,Done)
 
 .PHONY: shell
-shell: start ## Enter in the PHP container
+shell: ## Enter in the PHP container
 	@$(call log,Entering inside php container ...)
 	@$(DOCKER_COMPOSE) exec php bash
 
@@ -70,11 +70,12 @@ stop: ## Stop the docker stack
 .PHONY: clean
 clean: stop ## Clean the docker stack
 	@$(call log,Cleaning the docker stack ...)
-	@$(DOCKER_COMPOSE) down
-	@rm -rf var/ vendor/
+	@$(DOCKER_COMPOSE) down -v --remove-orphans
+	@rm -rf var vendor
+	@mkdir -p var vendor
 	@$(call log_success,Done)
 
-vendor: var/docker.build composer.json composer.lock ## Install composer dependencies
+vendor: var/docker.build composer.lock ## Install composer dependencies
 	@$(call log,Installing vendor ...)
 	@mkdir -p vendor
 	@$(PHP_RUN) composer install
