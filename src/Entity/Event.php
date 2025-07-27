@@ -59,13 +59,11 @@ class Event
      */
     private ?string $comment;
 
-    public function __construct(int $id, string $type, Actor $actor, Repo $repo, array $payload, \DateTimeImmutable $createAt, ?string $comment)
+    public function __construct(int $id, string $type, array $payload, \DateTimeImmutable $createAt, ?string $comment)
     {
         $this->id = $id;
         EventType::assertValidChoice($type);
         $this->type = $type;
-        $this->actor = $actor;
-        $this->repo = $repo;
         $this->payload = $payload;
         $this->createAt = $createAt;
         $this->comment = $comment;
@@ -73,6 +71,28 @@ class Event
         if ($type === EventType::COMMIT) {
             $this->count = $payload['size'] ?? 1;
         }
+    }
+        public function setActor(Actor $actor): self
+        {
+            $this->actor = $actor;
+            return $this;
+        }
+        public function setRepo(Repo $repo): self
+        {
+            $this->repo = $repo;
+            return $this;
+        }
+
+    public static function fromArray(array $array)
+    {
+        return new self(
+            (int) $array['id'],
+            $array['type'],
+            $array['payload'] ?? [],
+            new \DateTimeImmutable($array['created_at']),
+            $array['comment'] ?? null
+        );
+
     }
 
     public function id(): int
