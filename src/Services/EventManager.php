@@ -26,5 +26,6 @@ class EventManager
         $event->setRepo($repo);
         $this->entityManager->persist($event);
         $this->entityManager->flush();
+        $this->entityManager->clear();
     }
 }

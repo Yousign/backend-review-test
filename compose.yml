@@ -19,6 +19,27 @@ services:
       POSTGRES_PASSWORD: 123456789
       POSTGRES_DB: gh-archive-keyword
 
+  worker:
+    user: ${FIXUID:-1000}:${FIXGID:-1000}
+    command: bin/console messenger:consume async -vv --time-limit=3600
+    restart: unless-stopped
+    build:
+      context: ./docker
+    volumes:
+      - .:/app
+    environment:
+      COMPOSER_HOME: /tmp/composer
+    depends_on:
+      - database
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
 #   image: postgres:${POSTGRES_VERSION:-14}-alpine
 #   environment:
 #     POSTGRES_DB: ${POSTGRES_DB:-app}
@@ -36,3 +57,6 @@ services:
       - "database:db"
     ports:
       - "8888:8080"
+
+volumes:
+  redis-data:

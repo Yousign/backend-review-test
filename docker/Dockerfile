@@ -25,8 +25,11 @@ RUN \
 RUN apk add --no-cache make
 
 # Install php extensions
-RUN apk add --no-cache postgresql-dev bash \
-    && docker-php-ext-install -j$(nproc) pdo_pgsql
+RUN apk add --no-cache postgresql-dev bash $PHPIZE_DEPS \
+    && pecl install redis \
+    && docker-php-ext-install -j$(nproc) pdo_pgsql \
+    && docker-php-ext-enable redis \
+    && apk del --no-cache $PHPIZE_DEPS
 
 # Installing Symfony CLI
 ENV SYMFONY_ALLOW_ALL_IP=true
