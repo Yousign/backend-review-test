@@ -37,28 +37,28 @@ class ImportGitHubEventsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $violations = $this->validator->validate(
-            ["start-date"=>$input->getArgument('start-date'), "end-date"=>$input->getArgument('end-date')],
+            ['start-date' => $input->getArgument('start-date'), 'end-date' => $input->getArgument('end-date')],
             new Assert\Collection([
-                "start-date"=> [new Assert\DateTime(['format' => 'Y-m-d H:i'])],
-                "end-date"=> [new Assert\DateTime(['format' => 'Y-m-d H:i'])]
+                'start-date' => [new Assert\DateTime(['format' => 'Y-m-d H:i'])],
+                'end-date' => [new Assert\DateTime(['format' => 'Y-m-d H:i'])],
             ]),
-
         );
         if (count($violations) > 0) {
             foreach ($violations as $violation) {
                 $output->writeln(sprintf('<error>%s</error>', $violation->getMessage()));
             }
+
             return self::FAILURE;
         }
 
         $startDate = $input->getArgument('start-date');
         $endDate = $input->getArgument('end-date');
 
-
         $this->gitHubEventsImporter->importEvents(
             new \DateTimeImmutable($startDate),
-            new \DateTimeImmutable($endDate)
+            new \DateTimeImmutable($endDate),
         );
+
         return self::SUCCESS;
     }
 }

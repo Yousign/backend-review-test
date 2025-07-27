@@ -8,13 +8,16 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
+ *
  * @ORM\Table(name="repo")
  */
 class Repo
 {
     /**
      * @ORM\Id
+     *
      * @ORM\Column(type="bigint")
+     *
      * @ORM\GeneratedValue(strategy="NONE")
      */
     private int $id;
@@ -56,7 +59,7 @@ class Repo
         return new self(
             (int) $data['id'],
             $data['name'],
-            $data['url']
+            $data['url'],
         );
     }
 }

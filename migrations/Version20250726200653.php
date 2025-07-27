@@ -23,22 +23,22 @@ final class Version20250726200653 extends AbstractMigration
             'COM',
             'MSG',
             'PullRequestEvent',
-         'IssueCommentEvent',
-         'PushEvent',
-         'WatchEvent',
-         'CommitCommentEvent',
-         'CreateEvent',
-         'DeleteEvent',
-         'ForkEvent',
-         'GollumEvent',
-         'IssuesEvent',
-         'MemberEvent',
-         'PublicEvent',
-         'PullRequestReviewEvent',
-         'PullRequestReviewCommentEvent',
-         'PullRequestReviewThreadEvent',
-         'ReleaseEvent',
-         'SponsorshipEvent'
+            'IssueCommentEvent',
+            'PushEvent',
+            'WatchEvent',
+            'CommitCommentEvent',
+            'CreateEvent',
+            'DeleteEvent',
+            'ForkEvent',
+            'GollumEvent',
+            'IssuesEvent',
+            'MemberEvent',
+            'PublicEvent',
+            'PullRequestReviewEvent',
+            'PullRequestReviewCommentEvent',
+            'PullRequestReviewThreadEvent',
+            'ReleaseEvent',
+            'SponsorshipEvent',
         ];
         $this->addSql('
             ALTER TABLE "event" 
@@ -46,12 +46,10 @@ final class Version20250726200653 extends AbstractMigration
             ADD CONSTRAINT event_type_check 
             CHECK (type IN (\'' . implode('\', \'', $types) . '\'));
             ');
-
     }
 
     public function down(Schema $schema): void
     {
-
         $this->addSql('
             ALTER TABLE "event" 
             DROP CONSTRAINT IF EXISTS event_type_check,

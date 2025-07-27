@@ -9,10 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class EventManager
 {
-
-    public function __construct(private readonly EntityManagerInterface $entityManager)
-    {
-    }
+    public function __construct(private readonly EntityManagerInterface $entityManager) {}
 
     public function saveEvent(array $array): void
     {
