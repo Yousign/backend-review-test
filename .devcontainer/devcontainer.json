@@ -1,0 +1,53 @@
+{
+  "name": "YouSign Technical Test",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/robbert229/devcontainer-features/postgresql-client:1": {
+			"version": "13"
+		},
+    "ghcr.io/devcontainers/features/python:1": {
+            "version": "3.11"
+        }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "xdebug.php-debug",
+        "bmewburn.vscode-intelephense-client",
+        "neilbrayfield.php-docblocker",
+        "junstyle.php-cs-fixer",
+        "mehedidracula.php-namespace-resolver",
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "ms-vscode.vscode-typescript-next",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-docker",
+        "ms-azuretools.vscode-docker-compose",
+        "ms-vscode-remote.remote-containers"
+      ]
+    }
+  },
+
+  "forwardPorts": [8000, 8888],
+  "portsAttributes": {
+    "8000": {
+      "label": "Symfony Server",
+      "onAutoForward": "notify"
+    },
+    "8888": {
+      "label": "Adminer",
+      "onAutoForward": "notify"
+    }
+  },
+
+  "postCreateCommand": "chmod +x /workspace/.devcontainer/setup.sh && /workspace/.devcontainer/setup.sh",
+  "postStartCommand": "chmod +x /workspace/.devcontainer/setup.sh && /workspace/.devcontainer/setup.sh",
+  "remoteUser": "vscode"
+} 

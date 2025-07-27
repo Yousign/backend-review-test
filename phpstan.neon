@@ -1,0 +1,15 @@
+parameters:
+    level: 8
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - src/DataFixtures
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    ignoreErrors:
+        - '#Call to an undefined method [a-zA-Z0-9\\_]+::findOneBy#'
+        - '#Call to an undefined method [a-zA-Z0-9\\_]+::findBy#'
+        - '#Call to an undefined method [a-zA-Z0-9\\_]+::findAll#'
+    symfony:
+        container_xml_path: var/cache/dev/App_KernelDevDebugContainer.xml 

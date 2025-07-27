@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace:cached
+      - composer-cache:/tmp/composer
+    command: sleep infinity
+    environment:
+      - COMPOSER_HOME=/tmp/composer
+      - SYMFONY_ALLOW_ALL_IP=true
+    depends_on:
+      - database
+    networks:
+      - app-network
+
+  database:
+    image: postgres:14-alpine
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: yousign
+      POSTGRES_PASSWORD: 123456789
+      POSTGRES_DB: gh-archive-keyword
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  adminer:
+    image: adminer:4.7
+    restart: unless-stopped
+    ports:
+      - "8888:8080"
+    depends_on:
+      - database
+    networks:
+      - app-network
+
+volumes:
+  postgres-data:
+  composer-cache:
+
+networks:
+  app-network:
+    driver: bridge 

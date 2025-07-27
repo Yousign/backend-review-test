@@ -1,0 +1,41 @@
+repos:
+  # PHP CS Fixer for code style
+  - repo: https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
+    rev: v3.49.0
+    hooks:
+      - id: php-cs-fixer
+        args: [--config=.php-cs-fixer.php]
+        types: [php]
+        additional_dependencies: [friendsofphp/php-cs-fixer]
+
+  # PHPStan for static analysis
+  - repo: local
+    hooks:
+      - id: phpstan
+        name: PHPStan
+        entry: vendor/bin/phpstan
+        language: system
+        types: [php]
+        args: [analyse, --memory-limit=2G]
+        pass_filenames: false
+
+  # Rector for code modernization
+  - repo: local
+    hooks:
+      - id: rector
+        name: Rector
+        entry: vendor/bin/rector
+        language: system
+        types: [php]
+        args: [process, --dry-run]
+        pass_filenames: false
+
+  # General file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict 

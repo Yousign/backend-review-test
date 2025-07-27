@@ -86,6 +86,48 @@ You can clean the development environment (docker images, vendor, ...) running t
 make clean
 ```
 
+### Code Quality Tools
+
+This project uses several code quality tools that run automatically via pre-commit hooks:
+
+#### Pre-commit Hooks
+
+The following tools run automatically before each commit:
+
+- **PHP CS Fixer**: Enforces coding standards (PSR-12 + Symfony)
+- **PHPStan**: Static analysis for type safety and potential bugs
+- **Rector**: Code modernization and refactoring suggestions
+
+#### Manual Usage
+
+You can also run these tools manually:
+
+```bash
+# Run PHP CS Fixer
+vendor/bin/php-cs-fixer fix
+
+# Run PHPStan
+vendor/bin/phpstan analyse
+
+# Run Rector (dry-run to see what would change)
+vendor/bin/rector process --dry-run
+
+# Run Rector (apply changes)
+vendor/bin/rector process
+```
+
+#### Pre-commit Setup
+
+If you haven't set up pre-commit hooks yet:
+
+```bash
+# Install pre-commit
+pip install pre-commit
+
+# Install the git hooks
+pre-commit install
+```
+
 ### Makefile targets
 
 You can get available targets by running:
