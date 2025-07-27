@@ -17,6 +17,9 @@ RUN apt-get update && apt-get install -y \
     libjpeg62-turbo-dev \
     libzip-dev \
     postgresql-client \
+    sudo \
+    python3 \
+    python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
@@ -40,19 +43,24 @@ RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | b
     && apt-get install -y symfony-cli \
     && rm -rf /var/lib/apt/lists/*
 
-# Install additional development tools
-RUN apt-get update && apt-get install -y \
-    nodejs \
-    npm \
+# Install Node.js and npm (using NodeSource repository for latest LTS)
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
+    && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
-
-# Create non-root user
-RUN groupadd -g 1000 vscode \
-    && useradd -u 1000 -g vscode -s /bin/bash -m vscode
 
 # Install waitforit for service orchestration
 RUN curl -L -o /usr/local/bin/waitforit https://github.com/maxcnunes/waitforit/releases/download/v2.4.1/waitforit-linux_amd64 \
     && chmod +x /usr/local/bin/waitforit
+
+# Create non-root user with sudo privileges
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME -s /bin/bash \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
 
 # Configure PHP for development
 RUN echo "memory_limit = 512M" >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini \
@@ -73,13 +81,10 @@ RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/opcache.ini \
 WORKDIR /workspace
 
 # Change ownership of the workspace
-RUN chown -R vscode:vscode /workspace
+RUN chown -R $USERNAME:$USERNAME /workspace
 
 # Switch to non-root user
-USER vscode
+USER $USERNAME
 
 # Expose port
 EXPOSE 8000
-
-# Default command
-CMD ["symfony", "server:start", "--port=8000", "--allow-http"] 

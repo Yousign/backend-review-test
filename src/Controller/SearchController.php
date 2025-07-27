@@ -1,26 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Dto\SearchInput;
 use App\Repository\ReadEventRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class SearchController
 {
-    private ReadEventRepository $repository;
-    private SerializerInterface $serializer;
-
-    public function __construct(
-        ReadEventRepository $repository,
-        SerializerInterface  $serializer
-    ) {
-        $this->repository = $repository;
-        $this->serializer = $serializer;
+    public function __construct(private readonly ReadEventRepository $repository, private readonly DenormalizerInterface $denormalizer)
+    {
     }
 
     /**
@@ -28,7 +22,7 @@ class SearchController
      */
     public function searchCommits(Request $request): JsonResponse
     {
-        $searchInput = $this->serializer->denormalize($request->query->all(), SearchInput::class);
+        $searchInput = $this->denormalizer->denormalize($request->query->all(), SearchInput::class);
 
         $countByType = $this->repository->countByType($searchInput);
 
@@ -41,8 +35,8 @@ class SearchController
             ],
             'data' => [
                 'events' => $this->repository->getLatest($searchInput),
-                'stats' => $this->repository->statsByTypePerHour($searchInput)
-            ]
+                'stats' => $this->repository->statsByTypePerHour($searchInput),
+            ],
         ];
 
         return new JsonResponse($data);

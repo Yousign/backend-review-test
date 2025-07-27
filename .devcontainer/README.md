@@ -130,4 +130,4 @@ If automatic setup fails, you can run the setup manually:
 
 ## Environment Variables
 
-You can customize the environment by creating a `.env.local` file in the project root with your specific configuration. 
+You can customize the environment by creating a `.env.local` file in the project root with your specific configuration.

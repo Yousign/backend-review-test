@@ -1,12 +1,13 @@
 repos:
-  # PHP CS Fixer for code style
-  - repo: https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
-    rev: v3.49.0
+  # PHP CS Fixer for code style (using local installation)
+  - repo: local
     hooks:
       - id: php-cs-fixer
-        args: [--config=.php-cs-fixer.php]
+        name: PHP CS Fixer
+        entry: vendor/bin/php-cs-fixer
+        language: system
         types: [php]
-        additional_dependencies: [friendsofphp/php-cs-fixer]
+        args: [fix, --config=.php-cs-fixer.php, --diff, --dry-run]
 
   # PHPStan for static analysis
   - repo: local
@@ -38,4 +39,4 @@ repos:
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-added-large-files
-      - id: check-merge-conflict 
+      - id: check-merge-conflict

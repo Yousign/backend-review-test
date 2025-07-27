@@ -26,7 +26,7 @@ API contract and entities are already done. But feel free to adapt the code as y
 
 :point_right: **Nice to have**
 
-This **code base does not fulfill** Yousign quality requirements.  
+This **code base does not fulfill** Yousign quality requirements.
 Feel free to adapt the code with your own standards, quality requirements and sensibilities but keep in mind the functional perimeter of the project.
 
 
