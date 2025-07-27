@@ -1,0 +1,15 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+-   repo: local
+    hooks:
+    -   id: php-cs-fixer
+        name: PHP CS Fixer
+        entry: docker compose exec -iT php composer cs-fixer -- --using-cache=no --dry-run
+        language: system
+        files: \.php$
+    -   id: phpstan
+        name: PHPStan
+        entry: docker compose exec -iT php composer phpstan -- --no-progress --no-interaction
+        language: system
+        files: \.php$
