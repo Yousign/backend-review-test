@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Dto\SearchInput;
 use Doctrine\DBAL\Connection;
 
-class DbalReadEventRepository implements ReadEventRepository
+class DbalReadEventRepository implements ReadEventRepositoryInterface
 {
     private Connection $connection;
 

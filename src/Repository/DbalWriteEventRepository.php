@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Dto\EventInput;
 use Doctrine\DBAL\Connection;
 
-class DbalWriteEventRepository implements WriteEventRepository
+class DbalWriteEventRepository implements WriteEventRepositoryInterface
 {
     private Connection $connection;
 

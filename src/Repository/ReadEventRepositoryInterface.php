@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Dto\SearchInput;
 
-interface ReadEventRepository
+interface ReadEventRepositoryInterface
 {
     public function countAll(SearchInput $searchInput): int;
 

@@ -21,7 +21,7 @@ services:
 
   worker:
     user: ${FIXUID:-1000}:${FIXGID:-1000}
-    command: bin/console messenger:consume async -vv --time-limit=3600
+    command: bin/console messenger:consume async -vv --time-limit=3600 --no-debug
     restart: unless-stopped
     build:
       context: ./docker

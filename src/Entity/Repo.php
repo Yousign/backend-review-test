@@ -6,31 +6,20 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity()
- *
- * @ORM\Table(name="repo")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'repo')]
 class Repo
 {
-    /**
-     * @ORM\Id
-     *
-     * @ORM\Column(type="bigint")
-     *
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'bigint')]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    public string $name;
+    #[ORM\Column(type: 'string')]
+    private string $name;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    public string $url;
+    #[ORM\Column(type: 'string')]
+    private string $url;
 
     public function __construct(int $id, string $name, string $url)
     {
@@ -39,19 +28,40 @@ class Repo
         $this->url = $url;
     }
 
-    public function id(): int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function name(): string
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function url(): string
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getUrl(): string
     {
         return $this->url;
+    }
+
+    public function setUrl(string $url): self
+    {
+        $this->url = $url;
+
+        return $this;
     }
 
     public static function fromArray(array $data): self
