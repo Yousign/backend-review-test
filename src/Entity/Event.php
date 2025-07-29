@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Enum\LocalEventType;
 use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
@@ -66,7 +67,7 @@ class Event
     public function __construct(int $id, string $type, Actor $actor, Repo $repo, array $payload, \DateTimeImmutable $createAt, ?string $comment)
     {
         $this->id = $id;
-        EventType::assertValidChoice($type);
+        LocalEventType::isValid($type);
         $this->type = $type;
         $this->actor = $actor;
         $this->repo = $repo;
@@ -74,7 +75,7 @@ class Event
         $this->createAt = $createAt;
         $this->comment = $comment;
 
-        if ($type === EventType::COMMIT) {
+        if ($type === LocalEventType::COMMIT) {
             $this->count = $payload['size'] ?? 1;
         }
     }
