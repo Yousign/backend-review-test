@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Enum;
 
-use App\Entity\EventType;
-
 /**
  * Enum for mapping GitHub Archive event types to our internal EventType constants
  */
@@ -23,11 +21,11 @@ enum GitHubEventType: string
     public function toEventType(): string
     {
         return match ($this) {
-            self::PUSH_EVENT => EventType::COMMIT,
-            self::PULL_REQUEST_EVENT => EventType::PULL_REQUEST,
+            self::PUSH_EVENT => LocalEventType::COMMIT->value,
+            self::PULL_REQUEST_EVENT => LocalEventType::PULL_REQUEST->value,
             self::ISSUE_COMMENT_EVENT,
             self::COMMIT_COMMENT_EVENT,
-            self::PULL_REQUEST_REVIEW_COMMENT_EVENT => EventType::COMMENT,
+            self::PULL_REQUEST_REVIEW_COMMENT_EVENT => LocalEventType::COMMENT->value,
         };
     }
 
