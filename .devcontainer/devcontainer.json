@@ -1,0 +1,81 @@
+{
+    "name": "YouSign Technical Test",
+    "build": {
+        "context": "..",
+        "dockerfile": "Dockerfile"
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {
+            "version": "latest",
+            "enableNonRootDocker": "true",
+            "moby": "true"
+        },
+        "ghcr.io/robbert229/devcontainer-features/postgresql-client:1": {
+            "version": "13"
+        },
+        "ghcr.io/devcontainers/features/python:1": {
+            "version": "3.11"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "xdebug.php-debug",
+                "bmewburn.vscode-intelephense-client",
+                "neilbrayfield.php-docblocker",
+                "junstyle.php-cs-fixer",
+                "mehedidracula.php-namespace-resolver",
+                "ms-vscode.vscode-json",
+                "redhat.vscode-yaml",
+                "ms-vscode.vscode-typescript-next",
+                "bradlc.vscode-tailwindcss",
+                "ms-vscode.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "ms-vscode.vscode-docker",
+                "ms-azuretools.vscode-docker-compose",
+                "ms-vscode-remote.remote-containers"
+            ],
+            "settings": {
+                "php.suggest.basic": false,
+                "php.validate.executablePath": "/usr/local/bin/php",
+                "intelephense.files.maxSize": 5000000,
+                "terminal.integrated.defaultProfile.linux": "bash"
+            }
+        }
+    },
+    "forwardPorts": [
+        8000,
+        8888,
+        5432
+    ],
+    "portsAttributes": {
+        "8000": {
+            "label": "Symfony Server",
+            "onAutoForward": "notify"
+        },
+        "8888": {
+            "label": "Adminer",
+            "onAutoForward": "notify"
+        },
+        "5432": {
+            "label": "PostgreSQL"
+        }
+    },
+    "runArgs": [
+		"-e", "TZ=Europe/Paris",
+		"--mount",
+        "type=volume,source=bash_history_volume,target=/commandhistory",
+		"--mount",
+		"type=bind,source=${localEnv:HOME}/.bash_history,target=/commandhistory/.bash_history_host",
+		"-e", "HISTFILE=/commandhistory/.bash_history",
+		"--mount",
+		"type=bind,source=${localEnv:HOME}/.ssh,target=/home/vscode/.sshhost/"
+	],
+    "postCreateCommand": "chmod +x workspaces/backend-review-test/.devcontainer/setup.sh && workspaces/backend-review-test/.devcontainer/setup.sh",
+    "postStartCommand": "source ~/.bashrc",
+    "remoteUser": "vscode",
+    "containerEnv": {
+        "COMPOSER_HOME": "/tmp/composer",
+        "SYMFONY_ALLOW_ALL_IP": "true"
+    }
+}

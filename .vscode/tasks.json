@@ -1,0 +1,379 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run ImportGitHubEvents Command (Dry Run)",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "bin/console",
+                "app:import-github-events",
+                "--date=2024-01-15",
+                "--hour=10",
+                "--keyword=test",
+                "--dry-run"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run ImportGitHubEvents Command (Full Import)",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "bin/console",
+                "app:import-github-events",
+                "--date=2024-01-15",
+                "--hour=10",
+                "--keyword=test"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run All Tests",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "bin/phpunit"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Unit Tests",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "bin/phpunit",
+                "tests/Unit/"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Functional Tests",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "bin/phpunit",
+                "tests/Func/"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Command Tests",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "bin/phpunit",
+                "tests/Unit/Command/"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Enum Tests",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "bin/phpunit",
+                "tests/Unit/Enum/"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Controller Tests",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "bin/phpunit",
+                "tests/Unit/Controller/"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Service Tests",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "bin/phpunit",
+                "tests/Unit/Service/"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Clear Cache",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "bin/console",
+                "cache:clear"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Warm Up Cache",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "bin/console",
+                "cache:warmup"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Update Database Schema",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "bin/console",
+                "doctrine:schema:update",
+                "--force"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Load Fixtures",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "bin/console",
+                "doctrine:fixtures:load",
+                "--no-interaction"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Start Symfony Server",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "-S",
+                "localhost:8000",
+                "-t",
+                "public/"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "Install Dependencies",
+            "type": "shell",
+            "command": "composer",
+            "args": [
+                "install"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Update Dependencies",
+            "type": "shell",
+            "command": "composer",
+            "args": [
+                "update"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Check Code Style",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "vendor/bin/php-cs-fixer",
+                "fix",
+                "--dry-run",
+                "--diff"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Fix Code Style",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "vendor/bin/php-cs-fixer",
+                "fix"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Static Analysis",
+            "type": "shell",
+            "command": "php",
+            "args": [
+                "vendor/bin/phpstan",
+                "analyse",
+                "src/",
+                "tests/"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        }
+    ]
+} 
