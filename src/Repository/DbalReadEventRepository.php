@@ -28,6 +28,9 @@ SQL;
         ]);
     }
 
+    /**
+     * @return array<string, int>
+     */
     public function countByType(SearchInput $searchInput): array
     {
         $sql = <<<'SQL'
@@ -43,6 +46,9 @@ SQL;
         ]);
     }
 
+    /**
+     * @return array<int, array<string, int>>
+     */
     public function statsByTypePerHour(SearchInput $searchInput): array
     {
         $sql = <<<SQL
@@ -53,7 +59,7 @@ SQL;
             GROUP BY TYPE, EXTRACT(hour from create_at)
 SQL;
 
-        $stats = $this->connection->fetchAll($sql, [
+        $stats = $this->connection->fetchAllAssociative($sql, [
             'date' => $searchInput->date
         ]);
 
@@ -66,6 +72,9 @@ SQL;
         return $data;
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function getLatest(SearchInput $searchInput): array
     {
         $sql = <<<SQL

@@ -12,25 +12,28 @@ use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 class EventControllerTest extends WebTestCase
 {
     protected AbstractDatabaseTool $databaseTool;
-    private static $client;
+    protected static \Symfony\Bundle\FrameworkBundle\KernelBrowser $client;
 
     protected function setUp(): void
     {
         static::$client = static::createClient();
 
+        /** @var \Doctrine\ORM\EntityManagerInterface $entityManager */
         $entityManager = static::getContainer()->get('doctrine.orm.entity_manager');
         $metaData = $entityManager->getMetadataFactory()->getAllMetadata();
         $schemaTool = new SchemaTool($entityManager);
         $schemaTool->updateSchema($metaData);
 
-        $this->databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
+        /** @var \Liip\TestFixturesBundle\Services\DatabaseToolCollection $databaseToolCollection */
+        $databaseToolCollection = static::getContainer()->get(DatabaseToolCollection::class);
+        $this->databaseTool = $databaseToolCollection->get();
 
         $this->databaseTool->loadFixtures(
             [EventFixtures::class]
         );
     }
 
-    public function testUpdateShouldReturnEmptyResponse()
+    public function testUpdateShouldReturnEmptyResponse(): void
     {
         $client = static::$client;
 
@@ -40,14 +43,14 @@ class EventControllerTest extends WebTestCase
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
-            json_encode(['comment' => 'It‘s a test comment !!!!!!!!!!!!!!!!!!!!!!!!!!!'])
+            json_encode(['comment' => 'It\'s a test comment !!!!!!!!!!!!!!!!!!!!!!!!!!!']) ?: ''
         );
 
         $this->assertResponseStatusCodeSame(204);
     }
 
 
-    public function testUpdateShouldReturnHttpNotFoundResponse()
+    public function testUpdateShouldReturnHttpNotFoundResponse(): void
     {
         $client = static::$client;
 
@@ -57,7 +60,7 @@ class EventControllerTest extends WebTestCase
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
-            json_encode(['comment' => 'It‘s a test comment !!!!!!!!!!!!!!!!!!!!!!!!!!!'])
+            json_encode(['comment' => 'It\'s a test comment !!!!!!!!!!!!!!!!!!!!!!!!!!!']) ?: ''
         );
 
         $this->assertResponseStatusCodeSame(404);
@@ -68,13 +71,13 @@ class EventControllerTest extends WebTestCase
               }
             JSON;
 
-        self::assertJsonStringEqualsJsonString($expectedJson, $client->getResponse()->getContent());
+        self::assertJsonStringEqualsJsonString($expectedJson, $client->getResponse()->getContent() ?: '');
     }
 
     /**
      * @dataProvider providePayloadViolations
      */
-    public function testUpdateShouldReturnBadRequest(string $payload, string $expectedResponse)
+    public function testUpdateShouldReturnBadRequest(string $payload, string $expectedResponse): void
     {
         $client = static::$client;
 
@@ -88,10 +91,13 @@ class EventControllerTest extends WebTestCase
         );
 
         self::assertResponseStatusCodeSame(400);
-        self::assertJsonStringEqualsJsonString($expectedResponse, $client->getResponse()->getContent());
+        self::assertJsonStringEqualsJsonString($expectedResponse, $client->getResponse()->getContent() ?: '');
 
     }
 
+    /**
+     * @return iterable<string, array{string, string}>
+     */
     public function providePayloadViolations(): iterable
     {
         yield 'comment too short' => [

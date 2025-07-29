@@ -8,16 +8,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class SearchController
 {
     private ReadEventRepository $repository;
-    private SerializerInterface $serializer;
+    private DenormalizerInterface $serializer;
 
     public function __construct(
         ReadEventRepository $repository,
-        SerializerInterface  $serializer
+        DenormalizerInterface  $serializer
     ) {
         $this->repository = $repository;
         $this->serializer = $serializer;

@@ -89,7 +89,7 @@ class ImportGitHubEventsCommand extends Command
 
         try {
             if ($dryRun) {
-                $importedCount = $this->gitHubArchiveService->dryRunImportFromGHArchive($date, (int) $hour, $keyword, $io);
+                $importedCount = $this->gitHubArchiveService->dryRunImportFromGHArchive($date, (int) $hour, $keyword);
                 $io->success(sprintf('Would import %d events (dry run)', $importedCount));
             } else {
                 $importedCount = $this->gitHubArchiveService->importEventsFromGHArchive($date, (int) $hour, $keyword);
