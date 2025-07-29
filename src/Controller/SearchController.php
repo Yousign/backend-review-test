@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Dto\SearchInput;
-use App\Repository\ReadEventRepository;
+use App\Service\Interfaces\EventServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,15 +12,10 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class SearchController
 {
-    private ReadEventRepository $repository;
-    private DenormalizerInterface $serializer;
-
     public function __construct(
-        ReadEventRepository $repository,
-        DenormalizerInterface  $serializer
+        private readonly EventServiceInterface $eventService,
+        private readonly DenormalizerInterface $serializer
     ) {
-        $this->repository = $repository;
-        $this->serializer = $serializer;
     }
 
     /**
@@ -30,20 +25,7 @@ class SearchController
     {
         $searchInput = $this->serializer->denormalize($request->query->all(), SearchInput::class);
 
-        $countByType = $this->repository->countByType($searchInput);
-
-        $data = [
-            'meta' => [
-                'totalEvents' => $this->repository->countAll($searchInput),
-                'totalPullRequests' => $countByType['pullRequest'] ?? 0,
-                'totalCommits' => $countByType['commit'] ?? 0,
-                'totalComments' => $countByType['comment'] ?? 0,
-            ],
-            'data' => [
-                'events' => $this->repository->getLatest($searchInput),
-                'stats' => $this->repository->statsByTypePerHour($searchInput)
-            ]
-        ];
+        $data = $this->eventService->searchEvents($searchInput);
 
         return new JsonResponse($data);
     }

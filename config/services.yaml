@@ -26,3 +26,6 @@ services:
         tags: [ 'controller.service_arguments' ]
 
     App\Entity\EventType: ~
+    
+    # Bind service interfaces to their implementations
+    App\Service\EventServiceInterface: '@App\Service\EventService'

@@ -118,6 +118,11 @@ class Event
         return $this->comment;
     }
 
+    public function setComment(?string $comment): void
+    {
+        $this->comment = $comment;
+    }
+
     public function getCount(): int
     {
         return $this->count;
