@@ -67,7 +67,7 @@ class EventControllerTest extends WebTestCase
 
         $expectedJson = <<<JSON
               {
-                "message":"Event identified by 7897897897 not found !"
+                "message":"Event identified by 7897897897 not found!"
               }
             JSON;
 

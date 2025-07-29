@@ -25,7 +25,7 @@ final class Version20220224161501 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_3BAE0AA710DAF24A ON "event" (actor_id)');
         $this->addSql('CREATE INDEX IDX_3BAE0AA7BD359B2D ON "event" (repo_id)');
         $this->addSql('CREATE INDEX IDX_EVENT_TYPE ON "event" (type)');
-        $this->addSql('COMMENT ON COLUMN "event".type IS \'(DC2Type:EventType)\'');
+        $this->addSql('COMMENT ON COLUMN "event".type IS \'(DC2Type:string)\'');
         $this->addSql('COMMENT ON COLUMN "event".create_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('CREATE TABLE repo (id BIGINT NOT NULL, name VARCHAR(255) NOT NULL, url VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('ALTER TABLE "event" ADD CONSTRAINT FK_3BAE0AA710DAF24A FOREIGN KEY (actor_id) REFERENCES actor (id) NOT DEFERRABLE INITIALLY IMMEDIATE');

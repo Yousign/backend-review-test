@@ -4,7 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Actor;
 use App\Entity\Event;
-use App\Entity\EventType;
+use App\Enum\LocalEventType;
 use App\Entity\Repo;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -19,7 +19,7 @@ class EventFixtures extends Fixture
     {
         $event = new Event(
             self::EVENT_1_ID,
-            EventType::COMMENT,
+            LocalEventType::COMMENT->value,
             new Actor(
                 self::ACTOR_1_ID,
                 'jdoe',
