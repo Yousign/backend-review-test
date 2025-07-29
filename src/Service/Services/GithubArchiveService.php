@@ -10,6 +10,11 @@ use App\Utils\UrlUtils;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use App\Helpers\EventTypeMapper;
 use App\Helpers\EventKeywordFilter;
+use App\Entity\Event;
+use App\Repository\Interfaces\ActorRepositoryInterface;
+use App\Repository\Interfaces\RepoRepositoryInterface;
+use App\Repository\Interfaces\EventRepositoryInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 class GithubArchiveService implements GithubArchiveInterface
 {
@@ -17,6 +22,10 @@ class GithubArchiveService implements GithubArchiveInterface
         private readonly HttpClientInterface $httpClient,
         private readonly EventTypeMapper $eventTypeMapper,
         private readonly EventKeywordFilter $keywordFilter,
+        private readonly ActorRepositoryInterface $actorRepository,
+        private readonly RepoRepositoryInterface $repoRepository,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EntityManagerInterface $entityManager,
     ) {}
 
     public function dryRunImportFromGHArchive(SymfonyStyle $io, int $year, ?int $month, ?int $day, ?int $hour, string $keyword = ''): int
@@ -54,10 +63,53 @@ class GithubArchiveService implements GithubArchiveInterface
         return $importedCount;
     }
 
-    public function importEventsFromGHArchive(string $startDate, string $endDate, int $hour, string $keyword): int
+    public function importEventsFromGHArchive(int $year, ?int $month, ?int $day, ?int $hour, string $keyword): int
     {
-        // TODO: Implement importEventsFromGHArchive() method.
-        return 0;
+        $processedCount = 0;
+        $importedCount = 0;
+
+        foreach ($this->fetchGithubEvents(UrlUtils::buildGithubArchiveUrl($year, $month, $day, $hour)) as $eventData) {
+            $processedCount++;
+
+            // Skip events we don't support
+            if (!$this->eventTypeMapper->isSupportedEventType($eventData['type'])) {
+                continue;
+            }
+
+            // Filter by keyword if provided
+            if ($keyword !== '' && !$this->keywordFilter->eventMatchesKeyword($eventData, $keyword)) {
+                continue;
+            }
+
+            try {
+                // Check if event already exists
+                $eventId = (int) $eventData['id'];
+                if ($this->eventRepository->exist($eventId)) {
+                    continue; // Skip if already imported
+                }
+
+                // Create event using repositories
+                $event = $this->createEventFromGHArchiveData($eventData);
+                
+                $this->entityManager->persist($event);
+                $importedCount++;
+                
+                // Flush every 100 events to avoid memory issues
+                if ($importedCount % 100 === 0) {
+                    $this->entityManager->flush();
+                }
+                
+            } catch (\Exception $e) {
+                // Log error but continue with other events
+                error_log(sprintf('Error processing event %s: %s', $eventData['id'] ?? 'unknown', $e->getMessage()));
+                continue;
+            }
+        }
+
+        // Final flush
+        $this->entityManager->flush();
+
+        return $importedCount;
     }
 
     /**
@@ -216,5 +268,81 @@ class GithubArchiveService implements GithubArchiveInterface
         }
 
         return $urls;
+    }
+
+    /**
+     * @param array<string, mixed> $eventData
+     */
+    private function createEventFromGHArchiveData(array $eventData): Event
+    {
+        $eventType = $this->eventTypeMapper->mapEventType($eventData['type']);
+        if ($eventType === null) {
+            throw new \InvalidArgumentException(sprintf('Unsupported event type: %s', $eventData['type']));
+        }
+        
+        // Create or get Actor using repository
+        $actor = $this->actorRepository->findOrCreate($eventData['actor']);
+        
+        // Create or get Repo using repository
+        $repo = $this->repoRepository->findOrCreate($eventData['repo']);
+        
+        // Extract comment based on event type
+        $comment = $this->extractCommentFromEvent($eventData);
+        
+        // Create Event
+        return new Event(
+            (int) $eventData['id'],
+            $eventType,
+            $actor,
+            $repo,
+            $eventData['payload'] ?? [],
+            new \DateTimeImmutable($eventData['created_at']),
+            $comment
+        );
+    }
+
+    /**
+     * @param array<string, mixed> $eventData
+     */
+    private function extractCommentFromEvent(array $eventData): ?string
+    {
+        $githubEventType = \App\Enum\GitHubEventType::tryFrom($eventData['type']);
+        if ($githubEventType === null) {
+            return null;
+        }
+
+        return match ($githubEventType) {
+            \App\Enum\GitHubEventType::ISSUE_COMMENT_EVENT,
+            \App\Enum\GitHubEventType::COMMIT_COMMENT_EVENT,
+            \App\Enum\GitHubEventType::PULL_REQUEST_REVIEW_COMMENT_EVENT => 
+                $eventData['payload']['comment']['body'] ?? null,
+                
+            \App\Enum\GitHubEventType::PULL_REQUEST_EVENT => 
+                $this->extractPullRequestComment($eventData),
+                
+            \App\Enum\GitHubEventType::PUSH_EVENT => 
+                $this->extractCommitMessages($eventData),
+        };
+    }
+
+    /**
+     * @param array<string, mixed> $eventData
+     */
+    private function extractPullRequestComment(array $eventData): ?string
+    {
+        $pr = $eventData['payload']['pull_request'] ?? [];
+        return $pr['body'] ?? $pr['title'] ?? null;
+    }
+
+    /**
+     * @param array<string, mixed> $eventData
+     */
+    private function extractCommitMessages(array $eventData): ?string
+    {
+        if (isset($eventData['payload']['commits']) && !empty($eventData['payload']['commits'])) {
+            $messages = array_map(fn($commit) => $commit['message'] ?? '', $eventData['payload']['commits']);
+            return implode("\n", array_filter($messages));
+        }
+        return null;
     }
 }

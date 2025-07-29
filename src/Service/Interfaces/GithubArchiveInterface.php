@@ -29,5 +29,5 @@ interface GithubArchiveInterface
      * @param string $keyword
      * @return int
      */
-    public function importEventsFromGHArchive(string $startDate, string $endDate, int $hour, string $keyword): int;
+    public function importEventsFromGHArchive(int $year, ?int $month, ?int $day, ?int $hour, string $keyword): int;
 }
