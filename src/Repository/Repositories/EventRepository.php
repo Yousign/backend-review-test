@@ -5,7 +5,7 @@ namespace App\Repository\Repositories;
 use App\Dto\EventInput;
 use App\Dto\SearchInput;
 use App\Entity\Event;
-use App\Repository\EventRepositoryInterface;
+use App\Repository\Interfaces\EventRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

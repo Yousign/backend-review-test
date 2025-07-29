@@ -29,3 +29,4 @@ services:
     
     # Bind service interfaces to their implementations
     App\Service\EventServiceInterface: '@App\Service\EventService'
+    App\Repository\Interfaces\EventRepositoryInterface: '@App\Repository\Repositories\EventRepository'

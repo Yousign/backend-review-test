@@ -7,7 +7,7 @@ namespace App\Enum;
 /**
  * Enum for mapping GitHub Archive event types to our internal EventType constants
  */
-enum GitHubEventType: string
+enum GithubEventType: string
 {
     case PUSH_EVENT = 'PushEvent';
     case PULL_REQUEST_EVENT = 'PullRequestEvent';

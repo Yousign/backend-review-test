@@ -24,7 +24,7 @@ class Event
     private int $id;
 
     /**
-     * @ORM\Column(type="EventType", nullable=false)
+     * @ORM\Column(type="string", nullable=false)
      */
     private string $type;
 

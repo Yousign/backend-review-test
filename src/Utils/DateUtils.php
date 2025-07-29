@@ -23,4 +23,22 @@ class DateUtils
     {
         return $hour >= 0 && $hour <= 23;
     }
+
+    /**
+     * Check if two dates are in the same month
+     * @param string $date1
+     * @param string $date2
+     * @return bool
+     */
+    public static function areInSameMonth(string $date1, string $date2): bool
+    {
+        $dateTime1 = \DateTime::createFromFormat('Y-m-d', $date1);
+        $dateTime2 = \DateTime::createFromFormat('Y-m-d', $date2);
+        
+        if (!$dateTime1 || !$dateTime2) {
+            return false;
+        }
+        
+        return $dateTime1->format('Y-m') === $dateTime2->format('Y-m');
+    }
 }
