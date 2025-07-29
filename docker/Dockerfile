@@ -24,9 +24,21 @@ RUN \
 # Install make
 RUN apk add --no-cache make
 
-# Install php extensions
-RUN apk add --no-cache postgresql-dev bash \
+# Install php extensions and Xdebug dependencies
+RUN apk add --no-cache postgresql-dev bash linux-headers autoconf build-base \
     && docker-php-ext-install -j$(nproc) pdo_pgsql
+
+# Install and configure Xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
+# Configure Xdebug
+RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.discover_client_host=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.log=/var/log/xdebug.log" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Installing Symfony CLI
 ENV SYMFONY_ALLOW_ALL_IP=true

@@ -1,0 +1,364 @@
+{
+    "folders": [
+        {
+            "name": "Yousign",
+            "path": ".."
+        }
+    ],
+    "settings": {
+        // Workspace-wide settings
+        "files.exclude": {
+            "**/node_modules": true,
+            "**/var/cache": true,
+            "**/var/logs": true,
+            "**/build": true,
+            "**/dist": true,
+            "**/.git": false,
+            "**/.DS_Store": true,
+            "**/Thumbs.db": true,
+            "**/.nyc_output": true,
+            "**/coverage": true,
+            "**/.php-cs-fixer.cache": true
+        },
+        "search.exclude": {
+            "**/node_modules": true,
+            "**/vendor/**/Tests": true,
+            "**/vendor/**/tests": true,
+            "**/opvigil-api/var/cache": true,
+            "**/opvigil-api/var/logs": true,
+            "**/opvigil-historic-api/var/cache": true,
+            "**/opvigil-historic-api/var/logs": true,
+            "**/build": true,
+            "**/dist": true,
+            "**/coverage": true,
+            "**/.git": true
+        },
+        "files.watcherExclude": {
+            "**/node_modules/**": true,
+            "**/vendor/**": true,
+            "**/var/cache/**": true,
+            "**/var/logs/**": true,
+            "**/build/**": true,
+            "**/dist/**": true,
+            "**/.php-cs-fixer.cache": true,
+            "**/.phpunit.cache/**": true,
+            "**/.rector/**": true
+        },
+        // Editor settings
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+        },
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "editor.rulers": [
+            140
+        ],
+        "editor.wordWrap": "bounded",
+        "editor.wordWrapColumn": 140,
+        "editor.minimap.enabled": true,
+        "editor.bracketPairColorization.enabled": true,
+        "editor.guides.bracketPairs": true,
+        // File-specific formatting settings
+        "[php]": {
+            "editor.formatOnSave": true,
+            "editor.defaultFormatter": "junstyle.php-cs-fixer",
+            "editor.tabSize": 4,
+            "editor.insertSpaces": true
+        },
+        "[typescript]": {
+            "editor.formatOnSave": true,
+            "editor.defaultFormatter": "esbenp.prettier-vscode",
+            "editor.tabSize": 4,
+            "editor.insertSpaces": true
+        },
+        "[html]": {
+            "editor.formatOnSave": true,
+            "editor.defaultFormatter": "esbenp.prettier-vscode",
+            "editor.tabSize": 4,
+            "editor.insertSpaces": true
+        },
+        "[scss]": {
+            "editor.formatOnSave": true,
+            "editor.defaultFormatter": "esbenp.prettier-vscode",
+            "editor.tabSize": 4,
+            "editor.insertSpaces": true
+        },
+        "[css]": {
+            "editor.formatOnSave": true,
+            "editor.defaultFormatter": "esbenp.prettier-vscode",
+            "editor.tabSize": 4,
+            "editor.insertSpaces": true
+        },
+        "[json]": {
+            "editor.formatOnSave": true,
+            "editor.defaultFormatter": "esbenp.prettier-vscode",
+            "editor.tabSize": 2,
+            "editor.insertSpaces": true
+        },
+        "[yaml]": {
+            "editor.formatOnSave": true,
+            "editor.defaultFormatter": "esbenp.prettier-vscode",
+            "editor.tabSize": 2,
+            "editor.insertSpaces": true
+        },
+        "[twig]": {
+            "editor.formatOnSave": true,
+            "editor.tabSize": 4,
+            "editor.insertSpaces": true
+        },
+        // File associations
+        "files.associations": {
+            "*.yml": "yaml",
+            "*.yaml": "yaml",
+            "*.env": "dotenv",
+            "*.conf": "properties",
+            "*.sh": "shellscript",
+            "*.twig": "twig",
+            "docker-compose*.yml": "dockercompose",
+            "*.component.html": "html",
+            "*.component.ts": "typescript",
+            "*.service.ts": "typescript",
+            "*.module.ts": "typescript",
+            "*.guard.ts": "typescript",
+            "*.pipe.ts": "typescript",
+            "*.directive.ts": "typescript",
+            "*.resolver.ts": "typescript",
+            "*.interceptor.ts": "typescript",
+            ".php-cs-fixer.dist.php": "php",
+            "phpstan.neon.dist": "yaml",
+            "rector.php": "php"
+        },
+        // Terminal settings
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+            "zsh": {
+                "path": "/usr/bin/zsh",
+                "args": [
+                    "-l"
+                ]
+            },
+            "bash": {
+                "path": "/bin/bash",
+                "args": [
+                    "-l"
+                ]
+            }
+        },
+        "terminal.integrated.cwd": "${workspaceFolder}",
+        "terminal.integrated.fontSize": 14,
+        // Git settings
+        "git.enableSmartCommit": true,
+        "git.confirmSync": false,
+        "git.autofetch": true,
+        "git.openRepositoryInParentFolders": "always",
+        // Docker settings
+        "docker.showStartPage": false,
+        // PHP CS Fixer settings - Multi-project support
+        "php-cs-fixer.executablePath": "workspaces/backend-review-tests/opvigil/.devcontainer/bin/php-cs-fixer.phar",
+        "php-cs-fixer.config": "workspaces/backend-review-tests/opvigil/.devcontainer/linter-conf/php-cs-fixer.dist.php",
+        "php-cs-fixer.allowRisky": true,
+        "php-cs-fixer.pathMode": "override",
+        "php-cs-fixer.exclude": [
+            "vendor",
+            "var/cache",
+            "var/logs",
+            "node_modules"
+        ],
+        "php-cs-fixer.autoFixByBracket": true,
+        "php-cs-fixer.autoFixBySemicolon": true,
+        "php-cs-fixer.formatHtml": false,
+        "php-cs-fixer.onsave": true,
+        "php-cs-fixer.rules": "@Symfony",
+        "php-cs-fixer.ignorePHPVersion": false,
+        // PHP settings - Updated for PHP 8.3 and modern Symfony
+        "php.validate.enable": true,
+        "php.suggest.basic": false,
+        "php.executablePath": "/usr/local/bin/php",
+        "intelephense.files.exclude": [
+            "**/node_modules/**",
+            "**/vendor/**/{Tests,tests}/**",
+            "**/opvigil-api/var/cache/**",
+            "**/opvigil-api/var/logs/**",
+            "**/opvigil-historic-api/var/cache/**",
+            "**/opvigil-historic-api/var/logs/**"
+        ],
+        "intelephense.environment.includePaths": [
+            "${workspaceFolder}/opvigil-api/vendor",
+            "${workspaceFolder}/opvigil-historic-api/vendor"
+        ],
+        "intelephense.stubs": [
+            "apache",
+            "bcmath",
+            "bz2",
+            "calendar",
+            "Core",
+            "ctype",
+            "curl",
+            "date",
+            "dba",
+            "dom",
+            "enchant",
+            "exif",
+            "FFI",
+            "fileinfo",
+            "filter",
+            "fpm",
+            "ftp",
+            "gd",
+            "gettext",
+            "gmp",
+            "hash",
+            "iconv",
+            "imap",
+            "intl",
+            "json",
+            "ldap",
+            "libxml",
+            "mbstring",
+            "meta",
+            "mysqli",
+            "oci8",
+            "odbc",
+            "openssl",
+            "pcntl",
+            "pcre",
+            "PDO",
+            "pgsql",
+            "Phar",
+            "posix",
+            "pspell",
+            "readline",
+            "Reflection",
+            "session",
+            "shmop",
+            "SimpleXML",
+            "snmp",
+            "soap",
+            "sockets",
+            "sodium",
+            "SPL",
+            "sqlite3",
+            "standard",
+            "superglobals",
+            "sysvmsg",
+            "sysvsem",
+            "sysvshm",
+            "tidy",
+            "tokenizer",
+            "xml",
+            "xmlreader",
+            "xmlrpc",
+            "xmlwriter",
+            "xsl",
+            "Zend OPcache",
+            "zip",
+            "zlib"
+        ],
+        "intelephense.completion.insertUseDeclaration": true,
+        "intelephense.completion.triggerParameterHints": true,
+        "intelephense.diagnostics.undefinedTypes": false,
+        "intelephense.diagnostics.undefinedFunctions": false,
+        "intelephense.diagnostics.undefinedConstants": false,
+        "intelephense.diagnostics.undefinedClassConstants": false,
+        "intelephense.diagnostics.undefinedMethods": false,
+        "intelephense.diagnostics.undefinedProperties": false,
+        "intelephense.environment.phpVersion": "8.3",
+        "intelephense.files.maxSize": 5000000,
+        "intelephense.completion.maxItems": 100,
+        "intelephense.format.enable": false,
+        // TypeScript settings - Optimized for Angular 20
+        "typescript.preferences.importModuleSpecifier": "relative",
+        "typescript.suggest.autoImports": true,
+        "typescript.updateImportsOnFileMove.enabled": "always",
+        "typescript.preferences.includePackageJsonAutoImports": "auto",
+        "typescript.inlayHints.parameterNames.enabled": "literals",
+        "typescript.inlayHints.parameterTypes.enabled": true,
+        "typescript.inlayHints.variableTypes.enabled": false,
+        "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+        "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+        "typescript.preferences.quoteStyle": "single",
+        "typescript.format.semicolons": "insert",
+        "typescript.preferences.includeCompletionsForImportStatements": true,
+        "typescript.suggest.completeFunctionCalls": true,
+        "typescript.suggest.includeCompletionsForModuleExports": true,
+        "typescript.workspaceSymbols.scope": "currentProject",
+        // Angular 20 specific settings
+        "angular.enable-strict-mode-prompt": false,
+        "angular.suggest.includeCompletionsWithSnippetText": true,
+        "angular.suggest.includeAutomaticOptionalChainCompletions": true,
+        "angular.enableIvy": true,
+        "angular.log": "verbose",
+        "angular.experimental-ivy": true,
+        "angular.enableTraceResolution": false,
+        // Symfony settings
+        "symfony-vscode.phpExecutablePath": "/usr/bin/php",
+        "symfony-vscode.enableTwigSupport": true,
+        // ESLint settings - Angular/TypeScript focused
+        "eslint.validate": [
+            "typescript",
+            "html"
+        ],
+        "eslint.workingDirectories": [
+            "./opvigil-frontend"
+        ],
+        "eslint.format.enable": true,
+        // Prettier settings
+        "prettier.singleQuote": true,
+        "prettier.trailingComma": "es5",
+        "prettier.printWidth": 140,
+        "prettier.tabWidth": 4,
+        "prettier.useTabs": false,
+        "prettier.semi": true,
+        "prettier.endOfLine": "lf",
+        // Path Intellisense - Enhanced for Angular 20
+        "path-intellisense.mappings": {
+            "@": "${workspaceFolder}/opvigil-frontend/src",
+            "@app": "${workspaceFolder}/opvigil-frontend/src/app",
+            "@shared": "${workspaceFolder}/opvigil-frontend/src/app/shared",
+            "@core": "${workspaceFolder}/opvigil-frontend/src/app/core",
+            "@environments": "${workspaceFolder}/opvigil-frontend/src/environments",
+            "@assets": "${workspaceFolder}/opvigil-frontend/src/assets",
+            "@components": "${workspaceFolder}/opvigil-frontend/src/app/components",
+            "@services": "${workspaceFolder}/opvigil-frontend/src/app/services",
+            "@models": "${workspaceFolder}/opvigil-frontend/src/app/models",
+            "@guards": "${workspaceFolder}/opvigil-frontend/src/app/guards",
+            "@pipes": "${workspaceFolder}/opvigil-frontend/src/app/pipes",
+            "@directives": "${workspaceFolder}/opvigil-frontend/src/app/directives"
+        },
+        // PostgreSQL settings
+        "sqltools.connections": [
+            {
+                "name": "OPVigil Database",
+                "driver": "PostgreSQL",
+                "server": "localhost",
+                "port": 11543,
+                "database": "opvigil",
+                "username": "postgres"
+            }
+        ],
+        // Performance settings
+        "extensions.ignoreRecommendations": false,
+        "workbench.settings.enableNaturalLanguageSearch": false,
+        "search.smartCase": true,
+        "search.useIgnoreFiles": true,
+        // Security
+        "security.workspace.trust.untrustedFiles": "prompt",
+        "security.workspace.trust.enabled": true,
+        // Files settings
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true,
+        // Emmet settings for better HTML/CSS support
+        "emmet.includeLanguages": {
+            "twig": "html",
+            "typescript": "html"
+        },
+        "emmet.triggerExpansionOnTab": true,
+        // Auto-save settings
+        "files.autoSave": "onFocusChange",
+        "files.autoSaveDelay": 1000
+    }
+}
