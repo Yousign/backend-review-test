@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'actor')]
@@ -13,24 +14,23 @@ class Actor
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'NONE')]
+    #[Assert\NotNull]
+    #[Assert\Positive]
     private int $id;
 
     #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
     private string $login;
 
     #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 20)]
     private string $url;
 
     #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 20)]
     private string $avatarUrl;
-
-    public function __construct(int $id, string $login, string $url, string $avatarUrl)
-    {
-        $this->id = $id;
-        $this->login = $login;
-        $this->url = $url;
-        $this->avatarUrl = $avatarUrl;
-    }
 
     public function getId(): int
     {
@@ -78,15 +78,5 @@ class Actor
         $this->avatarUrl = $avatarUrl;
 
         return $this;
-    }
-
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (int) $data['id'],
-            $data['login'],
-            $data['url'],
-            $data['avatar_url'],
-        );
     }
 }

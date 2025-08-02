@@ -110,3 +110,10 @@ func-test: var/docker.up ## Run PhpUnit functionnal testsuite
 	@$(call log,Running ...)
 	$(PHP_EXEC) bin/phpunit -v --testsuite func --testdox
 	@$(call log_success,Done)
+
+.PHONY: test-coverage
+test-coverage: var/docker.up ## Run testsuite with coverage
+	@$(call log,Preparing test coverage ...)
+	@$(call log,Running ...)
+	$(DOCKER_COMPOSE) exec $(TTY) -e XDEBUG_MODE=coverage php  bin/phpunit
+	@$(call log_success,Done)

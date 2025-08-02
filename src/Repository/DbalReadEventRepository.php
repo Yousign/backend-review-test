@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Dto\SearchInput;
+use App\Repository\Interfaces\ReadEventRepositoryInterface;
 use Doctrine\DBAL\Connection;
 
 class DbalReadEventRepository implements ReadEventRepositoryInterface
@@ -19,50 +20,59 @@ class DbalReadEventRepository implements ReadEventRepositoryInterface
     public function countAll(SearchInput $searchInput): int
     {
         $sql = <<<SQL
-        SELECT sum(count) as count
+        SELECT SUM(count) as count
         FROM event
-        WHERE date(create_at) = :date
-        AND payload like %{$searchInput->keyword}%
+        WHERE created_at >= :startDate
+        AND created_at <= :endDate
+        AND payload::text like :keyword
 SQL;
 
         return (int) $this->connection->fetchOne($sql, [
-            'date' => $searchInput->date,
+            'startDate' => $searchInput->date->format('Y-m-d 00:00:00'),
+            'endDate' => $searchInput->date->format('Y-m-d 23:59:59'),
+            'keyword' => '%' . $searchInput->keyword . '%',
         ]);
     }
 
     public function countByType(SearchInput $searchInput): array
     {
-        $sql = <<<'SQL'
-            SELECT type, sum(count) as count
-            FROM event
-            WHERE date(create_at) = :date
-            AND payload like %{$searchInput->keyword}%
-            GROUP BY type
-SQL;
+        $sql = <<<SQL
+        SELECT type, SUM(count) AS count
+        FROM event
+        WHERE created_at >= :startDate
+        AND created_at <= :endDate
+          AND payload::text LIKE :keyword
+        GROUP BY type
+    SQL;
 
         return $this->connection->fetchAllKeyValue($sql, [
-            'date' => $searchInput->date,
+            'startDate' => $searchInput->date->format('Y-m-d 00:00:00'),
+            'endDate' => $searchInput->date->format('Y-m-d 23:59:59'),
+            'keyword' => '%' . $searchInput->keyword . '%',
         ]);
     }
 
     public function statsByTypePerHour(SearchInput $searchInput): array
     {
         $sql = <<<SQL
-            SELECT extract(hour from create_at) as hour, type, sum(count) as count
-            FROM event
-            WHERE date(create_at) = :date
-            AND payload like %{$searchInput->keyword}%
-            GROUP BY TYPE, EXTRACT(hour from create_at)
+        SELECT EXTRACT(hour from created_at) as hour, type, SUM(count) as count
+        FROM event
+        WHERE created_at >= :startDate
+        AND created_at <= :endDate
+        AND payload::text LIKE :keyword
+        GROUP BY type, EXTRACT(hour from created_at)
 SQL;
 
-        $stats = $this->connection->fetchAll($sql, [
-            'date' => $searchInput->date,
+        $stats = $this->connection->fetchAllAssociative($sql, [
+            'startDate' => $searchInput->date->format('Y-m-d 00:00:00'),
+            'endDate' => $searchInput->date->format('Y-m-d 23:59:59'),
+            'keyword' => '%' . $searchInput->keyword . '%',
         ]);
 
         $data = array_fill(0, 24, ['commit' => 0, 'pullRequest' => 0, 'comment' => 0]);
 
         foreach ($stats as $stat) {
-            $data[(int) $stat['hour']][$stat['type']] = $stat['count'];
+            $data[(int) $stat['hour']][$stat['type']] = (int) $stat['count'];
         }
 
         return $data;
@@ -71,24 +81,21 @@ SQL;
     public function getLatest(SearchInput $searchInput): array
     {
         $sql = <<<SQL
-            SELECT type, repo
-            FROM event
-            WHERE date(create_at) = :date
-            AND payload like %{$searchInput->keyword}%
+        SELECT e.type, r.id as repo_id, r.name as repo_name
+        FROM event e
+        JOIN repo r ON e.repo_id = r.id
+        WHERE e.created_at >= :startDate
+        AND e.created_at <= :endDate
+        AND e.payload::text LIKE :keyword
+        ORDER BY e.created_at DESC
+        LIMIT 10
 SQL;
 
-        $result = $this->connection->fetchAllAssociative($sql, [
-            'date' => $searchInput->date,
-            'keyword' => $searchInput->keyword,
+        return $this->connection->fetchAllAssociative($sql, [
+            'startDate' => $searchInput->date->format('Y-m-d 00:00:00'),
+            'endDate' => $searchInput->date->format('Y-m-d 23:59:59'),
+            'keyword' => '%' . $searchInput->keyword . '%',
         ]);
-
-        $result = array_map(static function ($item) {
-            $item['repo'] = json_decode($item['repo'], true);
-
-            return $item;
-        }, $result);
-
-        return $result;
     }
 
     public function exist(int $id): bool

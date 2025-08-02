@@ -15,13 +15,15 @@ services:
   database:
     image: postgres:14-alpine
     environment:
-      POSTGRES_USER: yousign
-      POSTGRES_PASSWORD: 123456789
-      POSTGRES_DB: gh-archive-keyword
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
 
   worker:
+    profiles:
+      - worker
     user: ${FIXUID:-1000}:${FIXGID:-1000}
-    command: bin/console messenger:consume async -vv --time-limit=3600 --no-debug
+    command: bin/console messenger:consume default -vv --time-limit=3600 --no-debug
     restart: unless-stopped
     build:
       context: ./docker

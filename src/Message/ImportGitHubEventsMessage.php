@@ -5,7 +5,7 @@ namespace App\Message;
 class ImportGitHubEventsMessage
 {
     public function __construct(
-        private string $dateHour,
+        private readonly string $dateHour,
     ) {}
 
     public function getDateHour(): string

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\MessageHandler;
 
+use App\Managers\EventManager;
 use App\Message\ImportGitHubEventsMessage;
 use App\Services\EventFilesDownloader;
 use App\Services\EventFilesExtractor;
 use App\Services\EventFilesReader;
-use App\Services\EventManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -34,7 +34,7 @@ class ImportGitHubEventsMessageHandler
         $extractionFilePath = sprintf('%s/%s.json', $this->parameterBag->get('app.extraction_directory'), $dateHour);
 
         $this->eventFilesDownloader->downloadFile(
-            sprintf('https://data.gharchive.org/%s.json.gz', $dateHour),
+            sprintf('%s/%s.json.gz', $this->parameterBag->get('app.events_download_url'), $dateHour),
             $filePath,
         );
 
@@ -42,15 +42,14 @@ class ImportGitHubEventsMessageHandler
 
         $this->processFile($extractionFilePath);
         $this->logger->debug('GitHub events import process Finished ' . $dateHour);
-
     }
 
     private function processFile(string $extractionFilePath): void
     {
+        $nbrLignes = 0;
         foreach ($this->eventFilesReader->readLinesFromFile($extractionFilePath) as $line) {
-            $array = json_decode($line, true);
-            $this->eventManager->saveEvent($array);
-
+            $this->eventManager->saveEvent($line);
+            $this->logger->debug(sprintf('GitHub events saved %d ', ++$nbrLignes));
         }
     }
 }

@@ -6,55 +6,54 @@ namespace App\Entity;
 
 use App\DBAL\Types\EventType;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
-#[ORM\Table(
-    name: '`event`',
-    indexes: [new ORM\Index(columns: ['type'], name: 'IDX_EVENT_TYPE')],
-)]
+#[ORM\Table(name: '`event`')]
+#[ORM\Index(columns: ['type'], name: 'idx_event_type')]
+#[ORM\Index(columns: ['created_at'], name: 'idx_event_created_at')]
 class Event
 {
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'NONE')]
+    #[Assert\NotNull]
+    #[Assert\Positive]
     private int $id;
 
     #[ORM\Column(type: 'EventType', nullable: false)]
+    #[Assert\NotBlank]
     private string $type;
 
     #[ORM\Column(type: 'integer', nullable: false)]
+    #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private int $count = 1;
 
     #[ORM\ManyToOne(targetEntity: Actor::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'actor_id', referencedColumnName: 'id')]
+    #[Assert\NotNull]
+    #[Assert\Valid]
     private Actor $actor;
 
     #[ORM\ManyToOne(targetEntity: Repo::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'repo_id', referencedColumnName: 'id')]
+    #[Assert\NotNull]
+    #[Assert\Valid]
     private Repo $repo;
 
     #[ORM\Column(type: 'json', nullable: false, options: ['jsonb' => true])]
+    #[Assert\NotNull]
+    #[Assert\Type('array')]
     private array $payload;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: false)]
+    #[Assert\NotNull]
+    #[Assert\LessThanOrEqual('now')]
     private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $comment;
-
-    public function __construct(int $id, string $type, array $payload, \DateTimeImmutable $createdAt, ?string $comment)
-    {
-        $this->id = $id;
-        EventType::assertValidChoice($type);
-        $this->type = $type;
-        $this->payload = $payload;
-        $this->createdAt = $createdAt;
-        $this->comment = $comment;
-
-        if (EventType::COMMIT === $type) {
-            $this->count = $payload['size'] ?? 1;
-        }
-    }
+    private ?string $comment = null;
 
     public function getId(): int
     {
@@ -154,17 +153,5 @@ class Event
         $this->comment = $comment;
 
         return $this;
-    }
-
-    public static function fromArray(array $array)
-    {
-        return new self(
-            (int) $array['id'],
-            $array['type'],
-            $array['payload'] ?? [],
-            new \DateTimeImmutable($array['created_at']),
-            $array['comment'] ?? null,
-        );
-
     }
 }

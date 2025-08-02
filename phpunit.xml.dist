@@ -32,6 +32,9 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <report>
+            <html outputDirectory="coverage/coverage-html" />
+        </report>
     </coverage>
 
     <listeners>

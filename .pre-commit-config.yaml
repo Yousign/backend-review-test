@@ -13,3 +13,10 @@ repos:
         entry: docker compose exec -iT php composer phpstan -- --no-progress --no-interaction
         language: system
         files: \.php$
+
+-   repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+      -   id: hadolint
+          name: Hadolint
+          files: Dockerfile$

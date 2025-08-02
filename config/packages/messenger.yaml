@@ -1,6 +1,7 @@
 framework:
   messenger:
     transports:
-      async: "%env(MESSENGER_TRANSPORT_DSN)%"
+      default: '%env(DEFAULT_MESSENGER_TRANSPORT_DSN)%'
+
     routing:
-      'App\Message\*': async
+      App\Message\*: default

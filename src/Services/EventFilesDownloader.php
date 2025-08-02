@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class EventFilesDownloader
@@ -27,7 +28,7 @@ class EventFilesDownloader
 
         $response = $this->httpClient->request('GET', $url);
         if (200 !== $response->getStatusCode()) {
-            throw new \RuntimeException("Failed to download file from: $url");
+            throw new HttpException($response->getStatusCode(), "Failed to download file from: $url");
         }
 
         $this->filesystem->mkdir(dirname($targetDirectory));

@@ -17,29 +17,27 @@ class EventFixtures extends Fixture
     public const int ACTOR_1_ID = 1;
     public const int REPO_1_ID = 1;
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $actor = new Actor(
-            self::ACTOR_1_ID,
-            'jdoe',
-            'https://api.github.com/users/jdoe',
-            'https://avatars.githubusercontent.com/u/1?',
-        );
-        $repo = new Repo(
-            self::REPO_1_ID,
-            'yousign/test',
-            'https://api.github.com/repos/yousign/backend-test',
-        );
-        $event = new Event(
-            self::EVENT_1_ID,
-            EventType::COMMENT,
-            [],
-            new \DateTimeImmutable(),
-            'Test comment initiate by fixture ',
-        );
+        $actor = new Actor();
+        $actor->setId(self::ACTOR_1_ID)
+            ->setLogin('jdoe')
+            ->setUrl('https://api.github.com/users/jdoe')
+            ->setAvatarUrl('https://avatars.githubusercontent.com/u/1?');
 
-        $event->setActor($actor);
-        $event->setRepo($repo);
+        $repo = new Repo();
+        $repo->setId(self::REPO_1_ID)
+            ->setName('yousign/test')
+            ->setUrl('https://api.github.com/repos/yousign/backend-test');
+
+        $event = new Event();
+        $event->setId(self::EVENT_1_ID)
+            ->setType(EventType::COMMENT)
+            ->setPayload([])
+            ->setCreatedAt(new \DateTimeImmutable())
+            ->setComment('Test comment initiate by fixture ')
+            ->setActor($actor)
+            ->setRepo($repo);
 
         $manager->persist($event);
         $manager->flush();

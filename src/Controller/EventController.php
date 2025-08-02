@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Dto\EventInput;
-use App\Repository\ReadEventRepositoryInterface;
-use App\Repository\WriteEventRepositoryInterface;
+use App\Repository\Interfaces\ReadEventRepositoryInterface;
+use App\Repository\Interfaces\WriteEventRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

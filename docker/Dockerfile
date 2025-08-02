@@ -1,3 +1,4 @@
+# hadolint global ignore=SC2059,DL4006,SC2046,DL3018,DL3019,DL4001,DL3047
 FROM php:8.3-fpm-alpine
 
 # Install composer
@@ -17,24 +18,23 @@ RUN USER=docker && \
     printf "user: $USER\ngroup: $GROUP\n" > /etc/fixuid/config.yml
 
 # Install waitforit (https://github.com/maxcnunes/waitforit)
-RUN \
-    wget -O /usr/local/bin/waitforit https://github.com/maxcnunes/waitforit/releases/download/v2.4.1/waitforit-linux_amd64 && \
+RUN wget -O /usr/local/bin/waitforit https://github.com/maxcnunes/waitforit/releases/download/v2.4.1/waitforit-linux_amd64 && \
     chmod +x /usr/local/bin/waitforit
 
-# Install make
-RUN apk add --no-cache make
-
-# Install php extensions
-RUN apk add --no-cache postgresql-dev bash $PHPIZE_DEPS \
-    && pecl install redis \
+# Install make and PHP extensions
+RUN apk add --no-cache $PHPIZE_DEPS postgresql-dev bash autoconf gcc g++ make libtool linux-headers \
+    && pecl install redis xdebug \
     && docker-php-ext-install -j$(nproc) pdo_pgsql \
-    && docker-php-ext-enable redis \
-    && apk del --no-cache $PHPIZE_DEPS
+    && docker-php-ext-enable redis xdebug \
+    && apk del --no-cache autoconf gcc g++ make libtool linux-headers
+
+
+# Configure Xdebug
+COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Installing Symfony CLI
 ENV SYMFONY_ALLOW_ALL_IP=true
-RUN apk add --no-cache bash && \
-    curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.alpine.sh' | bash && \
+RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.alpine.sh' | bash && \
     apk add symfony-cli
 
 USER docker:docker

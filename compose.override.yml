@@ -1,6 +1,11 @@
 services:
-###> doctrine/doctrine-bundle ###
-  database:
-      ports:
-          - "5432:5432"
-###< doctrine/doctrine-bundle ###
+  php:
+    environment:
+      COMPOSER_HOME: /tmp/composer
+      # See https://xdebug.org/docs/all_settings#mode
+      XDEBUG_MODE: "${XDEBUG_MODE:-debug}"
+      PHP_IDE_CONFIG: "serverName=docker"
+    extra_hosts:
+      # Ensure that host.docker.internal is correctly defined on Linux
+      - host.docker.internal:host-gateway
+

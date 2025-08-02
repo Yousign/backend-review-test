@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'repo')]
@@ -13,20 +14,18 @@ class Repo
     #[ORM\Id]
     #[ORM\Column(type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'NONE')]
+    #[Assert\NotNull]
+    #[Assert\Positive]
     private int $id;
 
     #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
     private string $name;
 
     #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    #[Assert\Url]
     private string $url;
-
-    public function __construct(int $id, string $name, string $url)
-    {
-        $this->id = $id;
-        $this->name = $name;
-        $this->url = $url;
-    }
 
     public function getId(): int
     {
@@ -62,14 +61,5 @@ class Repo
         $this->url = $url;
 
         return $this;
-    }
-
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (int) $data['id'],
-            $data['name'],
-            $data['url'],
-        );
     }
 }
