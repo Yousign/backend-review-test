@@ -7,7 +7,7 @@ namespace App\DataFixtures;
 use App\Entity\Actor;
 use App\Entity\Event;
 use App\Entity\Repo;
-use App\DBAL\Types\EventType;
+use App\Enums\EventType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 

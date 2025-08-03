@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\DBAL\Types\EventType;
+use App\Enums\EventType;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -21,9 +21,9 @@ class Event
     #[Assert\Positive]
     private int $id;
 
-    #[ORM\Column(type: 'EventType', nullable: false)]
+    #[ORM\Column(type: 'string', nullable: false, enumType: EventType::class)]
     #[Assert\NotBlank]
-    private string $type;
+    private EventType $type;
 
     #[ORM\Column(type: 'integer', nullable: false)]
     #[Assert\NotNull]
@@ -67,12 +67,12 @@ class Event
         return $this;
     }
 
-    public function getType(): string
+    public function getType(): EventType
     {
         return $this->type;
     }
 
-    public function setType(string $type): self
+    public function setType(EventType $type): self
     {
         $this->type = $type;
 

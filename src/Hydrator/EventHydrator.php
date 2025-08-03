@@ -2,7 +2,7 @@
 
 namespace App\Hydrator;
 
-use App\DBAL\Types\EventType;
+use App\Enums\EventType;
 use App\Entity\Event;
 
 class EventHydrator
@@ -10,13 +10,12 @@ class EventHydrator
     public function setEventFromArray(array $array): Event
     {
         $event = new Event();
-        EventType::assertValidChoice($array['type']);
         $event->setId($array['id'])
-            ->setType($array['type'])
+            ->setType(EventType::from($array['type']))
             ->setPayload($array['payload'] ?? [])
             ->setCreatedAt(new \DateTimeImmutable($array['created_at']))
             ->setComment($array['payload']['comment']['body'] ?? null);
-        if (EventType::COMMIT === $array['type']) {
+        if (EventType::COMMIT === EventType::from($array['type'])) {
             $event->setCount($payload['size'] ?? 1);
         }
 

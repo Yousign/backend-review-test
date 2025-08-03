@@ -2,6 +2,7 @@
 
 namespace App\Tests\Func\Managers;
 
+use App\Enums\EventType;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Managers\EventManager;
 use App\Entity\Event;
@@ -50,7 +51,7 @@ class EventManagerFunctionalTest extends KernelTestCase
         $savedEvent = $this->entityManager->getRepository(Event::class)->find($eventData['id']);
 
         self::assertNotNull($savedEvent);
-        self::assertEquals($eventData['type'], $savedEvent->getType());
+        self::assertEquals(EventType::from($eventData['type']), $savedEvent->getType());
         self::assertEquals($eventData['actor']['login'], $savedEvent->getActor()->getLogin());
         self::assertEquals($eventData['repo']['name'], $savedEvent->getRepo()->getName());
     }
