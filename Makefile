@@ -77,7 +77,7 @@ clean: stop ## Clean the docker stack
 
 vendor: var/docker.build composer.lock ## Install composer dependencies
 	@$(call log,Installing vendor ...)
-	@mkdir -p vendor
+	@mkdir -p vendor || true
 	@$(PHP_RUN) composer install
 	@$(call touch,vendor)
 
