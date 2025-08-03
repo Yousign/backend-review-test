@@ -11,9 +11,3 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: src/Services/GitHubEventsImporter.php
-
-		-
-			message: '#^Unsafe access to private property App\\Tests\\Func\\EventControllerTest\:\:\$client through static\:\:\.$#'
-			identifier: staticClassAccess.privateProperty
-			count: 4
-			path: tests/Func/EventControllerTest.php

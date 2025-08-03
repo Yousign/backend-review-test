@@ -32,6 +32,12 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <exclude>
+            <directory>src/Entity</directory>
+            <directory>src/Migrations</directory>
+            <directory>src/DependencyInjection</directory>
+            <file>src/Kernel.php</file>
+        </exclude>
         <report>
             <html outputDirectory="coverage/coverage-html" />
         </report>
