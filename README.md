@@ -76,23 +76,22 @@ Here are some directions we're considering for the future — we'll discuss thes
 
 ## Interview format
 
-This is a **technical discussion interview**, not a coding test. Here's what to expect:
+This is a **technical discussion interview**, not a (live) coding test. Here's what to expect:
 
 **Before the interview**
-- Fork this repository and spend around **1h30 exploring the codebase** — understand how it works, its structure, what it does well, and what you'd improve
+- Fork this repository and spend around **2 hours exploring the codebase** — understand how it works, its structure, what it does well, and what you would improve
 - Feel free to use AI tools during your preparation, but don't use them to generate support material for the interview (see below)
 - Come ready to discuss the code, its architecture, and how you'd approach the features above
 - And again, no need to implement anything
 
 **During the interview**
-- You'll be asked to **share your screen** and walk us through the code in your IDE
-- We'll also do some **whiteboarding** together — have a tool ready (e.g. [Draw.io](https://draw.io), [Miro](https://miro.com), Excalidraw, or any other live diagramming tool you're comfortable with)
+- You'll be discussing with **one developer and one engineering manager**, during **1 hour and a half**
+- You'll be asked to **share your screen** and walk us through the code in your IDE while we dive on specific areas together
+- We'll also do some **whiteboarding** together — please have a tool ready (e.g. [Draw.io](https://draw.io), [Miro](https://miro.com), Excalidraw, or any other live diagramming tool you're comfortable with)
 - We're interested in your **reasoning and analytical thinking** as well as your **programming litteracy**, not in whether you've memorized the code
-- Please **don't bring any support material** into the interview (slides, notes). We want to hear your own live thoughts, not a restitution of content that was potentially AI-generated
+- Please **don't use any pre-prepared support material** into the interview (slides, notes etc.). We want to hear your own live thoughts, not a restitution of content that was potentially AI-generated
 - **Using AI during the interview is not allowed** and will be considered disqualifying
 
 ## A note on AI and this process
-
-Finally, note that we're still figuring out the best way to run technical interviews in an era where AI tools can do so much. This format is a work in progress, and we appreciate your flexibility as we iterate on it. You can count on us to be flexible too.
 
 We are strong advocates for bullish AI adoption in day-to-day engineering work. However with this interview we want to evaluate your technical thinking and reasoning, not your ability to prompt a model. We hope that makes sense, and we look forward to a genuine conversation.
