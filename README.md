@@ -1,99 +1,58 @@
 # Challenge GH Archive Keyword
 
-## :rocket: THE project
+## The project
 
-This project aims to provide detailed statistics about GitHub public events (commit, pull-request, comments) related to a keyword. These data will be displayed on a daily basis.
+This project provides statistics about GitHub public events (commits, pull requests, comments) related to a keyword, displayed on a daily basis.
 
-![Screenshoot](./challenge-gh-keyword.png)
+![Screenshot](./challenge-gh-keyword.png)
 
-It uses [GH Archive](https://www.gharchive.org/) as its single source of truth. [GH Archive](https://www.gharchive.org/) records public GitHub data (commit, pull requests,...), archives it, and makes it easily accessible for further analysis.
+It uses [GH Archive](https://www.gharchive.org/) as its single source of truth. GH Archive records public GitHub activity, archives it, and makes it accessible for further analysis.
 
-## :woman_teacher: What you will have to do
+## How to use the development environment
 
-### Implement events import functionality
+You need `make` and `docker` installed.
 
-:point_right: **Must have**
-
-GitHub events will be imported by a Symfony command. Your goal is to fulfill this command in order to import GitHub events in our database. This command can be found here:
-
-```
-App\Command\ImportGitHubEventsCommand
-```
-
-API contract and entities are already done. But feel free to adapt the code as you like.
-
-### Refactor the project
-
-:point_right: **Nice to have**
-
-This **code base does not fulfill** Yousign quality requirements.  
-Feel free to adapt the code with your own standards, quality requirements and sensibilities but keep in mind the functional perimeter of the project.
-
-
-## :nerd_face: Requirements
-
-* Create a fork of this project
-* **Must have**: Create a dedicated PR targeted on your forked project for the command  (**IMPORTANT**: PR should be targeted on YOUR forked repo and NOT our)
-* **Nice to have**: Create a dedicated refactoring PR targeted on your forked project  (**IMPORTANT**: PR should be targeted on YOUR forked repo and NOT our)
-
-Your PR will be reviewed during our technical interview, and it will be a support to talk about your choices.
-
-## :computer: How to use development environment
-
-You need `make` and `docker` installed to start the development environment.
-
-### Start the development environment
-
-The following command will start the development environment:
+### Start
 
 ```bash
 make start
 ```
 
-You can access to the application at [127.0.0.1:8000](http://127.0.0.1:8000/).
+The application is available at [127.0.0.1:8000](http://127.0.0.1:8000/).
 
-### Access to a shell in the PHP container
+### Shell access
 
 ```bash
 make shell
 ```
 
-### Test tools
+### Tests
 
-You can run PHPUnit with the following command:
 ```bash
 # Run the unit test suite
 make unit-test
 
-# init the db test (required once)
+# Init the test DB (required once)
 make db-test
 
 # Run the functional test suite
 make func-test
 ```
 
-### Stop the development environment
+### Stop / Clean
 
-You can stop the development environment running this command:
 ```bash
 make stop
-```
-
-### Clean the development environment
-
-You can clean the development environment (docker images, vendor, ...) running this command:
-```bash
 make clean
 ```
 
-### Makefile targets
+### All available targets
 
-You can get available targets by running:
 ```bash
 make
 ```
 
-```bash
+```
 build                          Build the docker stack
 pull                           Pulling docker images
 shell                          Enter in the PHP container
@@ -104,6 +63,36 @@ vendor                         Install composer dependencies
 unit-test                      Run PhpUnit unit testsuite
 func-test                      Run PhpUnit functionnal testsuite
 ```
-**We encourage you to have fun during this challenge!**
 
-# :muscle: Good luck!
+## Features we'd like to build next
+
+Here are some directions we're considering for the future — we'll discuss these together during the interview:
+
+- **GitHub events import** — complete the `ImportGitHubEventsCommand` to fetch and persist events from GH Archive
+- **Pagination** — handle large result sets on the search endpoint
+- **Advanced filtering** — filter by event type, actor, or date range
+- **Caching** — reduce redundant queries for frequently accessed stats
+- **Export** — allow downloading event data as CSV or JSON
+
+## Interview format
+
+This is a **technical discussion interview**, not a coding test. Here's what to expect:
+
+**Before the interview**
+- Fork this repository and spend around **1h30 exploring the codebase** — understand how it works, its structure, what it does well, and what you'd improve
+- Feel free to use AI tools during your preparation, but don't use them to generate support material for the interview (see below)
+- Come ready to discuss the code, its architecture, and how you'd approach the features above
+- And again, no need to implement anything
+
+**During the interview**
+- You'll be asked to **share your screen** and walk us through the code in your IDE
+- We'll also do some **whiteboarding** together — have a tool ready (e.g. [Draw.io](https://draw.io), [Miro](https://miro.com), Excalidraw, or any other live diagramming tool you're comfortable with)
+- We're interested in your **reasoning and analytical thinking** as well as your **programming litteracy**, not in whether you've memorized the code
+- Please **don't bring any support material** into the interview (slides, notes). We want to hear your own live thoughts, not a restitution of content that was potentially AI-generated
+- **Using AI during the interview is not allowed** and will be considered disqualifying
+
+## A note on AI and this process
+
+Finally, note that we're still figuring out the best way to run technical interviews in an era where AI tools can do so much. This format is a work in progress, and we appreciate your flexibility as we iterate on it. You can count on us to be flexible too.
+
+We are strong advocates for bullish AI adoption in day-to-day engineering work. However with this interview we want to evaluate your technical thinking and reasoning, not your ability to prompt a model. We hope that makes sense, and we look forward to a genuine conversation.
